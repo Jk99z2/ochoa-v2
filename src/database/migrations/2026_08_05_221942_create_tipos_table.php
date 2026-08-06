@@ -6,20 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('tipos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('tipos', function (Blueprint $t) {
+            $t->id();
+            $t->string('nombre', 60);
+            $t->string('slug', 60)->unique();
+            $t->unsignedSmallInteger('orden')->default(0);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tipos');

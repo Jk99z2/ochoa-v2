@@ -6,3 +6,6 @@
 /src/storage/framework/cache/*
 /src/storage/logs/*.log
 .env
+/src/public/js/filament
+/src/public/css/filament
+/src/public/fonts/filament

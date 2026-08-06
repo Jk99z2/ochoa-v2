@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('agentes', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('agentes', function (Blueprint $t) {
+            $t->id();
+            $t->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $t->string('nombre', 120);
+            $t->string('email', 120)->unique();
+            $t->string('telefono', 30)->nullable();
+            $t->string('whatsapp', 30)->nullable();
+            $t->string('foto')->nullable();
+            $t->boolean('activo')->default(true);
+            $t->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('agentes');

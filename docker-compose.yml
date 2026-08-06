@@ -18,7 +18,7 @@ services:
     container_name: ochoa2_web
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8082:80"
     volumes:
       - ./src:/var/www/html:z
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro,z
