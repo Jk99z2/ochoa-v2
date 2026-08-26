@@ -10,6 +10,7 @@ use App\Filament\Resources\Propiedades\Schemas\PropiedadForm;
 use App\Filament\Resources\Propiedades\Schemas\PropiedadInfolist;
 use App\Filament\Resources\Propiedades\Tables\PropiedadesTable;
 use App\Models\Propiedad;
+use App\Filament\Resources\Propiedades\PropiedadResource\RelationManagers\ImagenesRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -25,6 +26,22 @@ class PropiedadResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'titulo';
+    protected static ?string $slug = "propiedades";
+
+    public static function getModelLabel(): string
+    {
+        return 'Propiedad';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Propiedades';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Propiedades';
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -44,7 +61,7 @@ class PropiedadResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ImagenesRelationManager::class,
         ];
     }
 

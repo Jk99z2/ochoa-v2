@@ -19,40 +19,65 @@ use Filament\Tables\Table;
 class TipoResource extends Resource
 {
     protected static ?string $model = Tipo::class;
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $recordTitleAttribute = "nombre";
 
-    protected static ?string $recordTitleAttribute = 'nombre';
+    public static function getPluralModelLabel(): string
+    {
+        return "Tipos";
+    }
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('nombre')
+                TextInput::make("nombre")
+                    ->label("Nombre")
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(60)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(fn ($state, callable $set) =>
+                        $set("slug", \Illuminate\Support\Str::slug($state))
+                    ),
+
+                TextInput::make("slug")
+                    ->label("Slug")
+                    ->required()
+                    ->maxLength(60)
+                    ->unique(ignoreRecord: true),
+
+                TextInput::make("orden")
+                    ->label("Orden")
+                    ->numeric()
+                    ->default(0)
+                    ->required(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('nombre')
+            ->recordTitleAttribute("nombre")
+            ->defaultSort("orden")
             ->columns([
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make("nombre")
+                    ->label("Nombre")
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make("slug")
+                    ->label("Slug")
+                    ->searchable(),
+
+                TextColumn::make("orden")
+                    ->label("Orden")
+                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::m1ake(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
@@ -65,7 +90,7 @@ class TipoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageTipos::route('/'),
+            "index" => ManageTipos::route("/"),
         ];
     }
 }
