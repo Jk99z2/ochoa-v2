@@ -31,9 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->profile()
             ->brandName('Ochoa Real Estate')
             ->colors([
-                'primary' => Color::hex('#923244'),
+                'primary' => Color::hex('#b8872a'),
             ])
-            ->favicon(asset('favicon.ico'))
+            ->favicon(asset('logos/logochoa.png'))
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

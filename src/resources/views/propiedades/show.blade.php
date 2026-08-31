@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ $propiedad->titulo }} - Ochoa Real Estate Services</title>
+  <meta name="description" content="{{ Str::limit($propiedad->descripcion ?? $propiedad->titulo, 155) }}">
+  <meta property="og:title" content="{{ $propiedad->titulo }} - Ochoa Real Estate Services">
+  <meta property="og:description" content="{{ Str::limit($propiedad->descripcion ?? $propiedad->titulo, 155) }}">
+  <meta property="og:type" content="website">
+  @if ($propiedad->imagenes->isNotEmpty())
+  <meta property="og:image" content="{{ Storage::url($propiedad->imagenes->first()->path) }}">
+  @endif
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
   <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
@@ -20,6 +27,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 </head>
 <body>
+@if (session("success"))
+  <div class="alert-success"><div class="wrap">{{ session("success") }}</div></div>
+@endif
 
 <div class="topbar">
   <div class="wrap">
@@ -40,7 +50,15 @@
     <button class="nav-burger" id="burger">Menu</button>
     <ul class="nav-menu" id="nav-menu">
       <li><a href="/">Inicio</a></li>
-      <li><a href="/#nuevas">Propiedades</a></li>
+      <li class="nav-drop">
+        <a href="{{ route("propiedades.index") }}">Propiedades</a>
+        <div class="nav-drop-panel">
+          <a href="{{ route("propiedades.index") }}">Todas</a>
+          @foreach ($navTipos as $navTipo)
+            <a href="{{ route("propiedades.index", ["tipo" => $navTipo->slug]) }}">{{ $navTipo->nombre }}</a>
+          @endforeach
+        </div>
+      </li>
       <li><a href="/#contacto">Contacto</a></li>
     </ul>
   </div>
@@ -148,6 +166,18 @@
           <p class="agent-contact">+52 (314) 333-3202</p>
           <p class="agent-contact">+52 (314) 376-9162</p>
         @endif
+        <form method="POST" action="{{ route("leads.store") }}" class="lead-form">
+          @csrf
+          <input type="text" name="website" value="" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="form_time" value="{{ time() }}">
+          <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+          <input type="text" name="nombre" placeholder="Tu nombre" required>
+          <input type="email" name="email" placeholder="Tu email">
+          <input type="tel" name="telefono" placeholder="Tu telefono">
+          <textarea name="mensaje" placeholder="Mensaje" rows="3">Me interesa esta propiedad: {{ $propiedad->titulo }}</textarea>
+          @error("nombre")<p class="lead-error">{{ $message }}</p>@enderror
+          <button type="submit" class="agent-cta">Enviar mensaje</button>
+        </form>
       </div>
     </aside>
   </div>
@@ -173,6 +203,11 @@ a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-
 .nav-menu{display:flex;align-items:center;gap:2px}
 .nav-menu li a{display:block;padding:6px 12px;font-size:12.5px;color:rgba(255,255,255,.6);border-radius:3px;transition:color .2s,background .2s;white-space:nowrap}
 .nav-menu li a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nav-drop{position:relative}
+.nav-drop-panel{display:none;position:absolute;top:100%;left:0;background:#1a1918;border:1px solid var(--border);border-radius:4px;min-width:190px;padding:6px 0;box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:10}
+.nav-drop:hover .nav-drop-panel{display:block}
+.nav-drop-panel a{display:block;padding:8px 18px;font-size:12.5px;color:rgba(255,255,255,.6)!important;border-radius:0!important;background:none!important}
+.nav-drop-panel a:hover{background:rgba(184,135,42,.12)!important;color:#fff!important}
 .nav-burger{display:none;background:none;border:1px solid rgba(255,255,255,.2);border-radius:3px;padding:6px 10px;cursor:pointer;color:#fff;font-size:14px}
 @media (max-width:900px){
   .nav-burger{display:block}
@@ -213,6 +248,10 @@ a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-
 .agent-contact{font-size:13px;color:var(--muted)}
 .agent-cta{display:block;text-align:center;background:var(--gold);color:#fff;font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;padding:12px;border-radius:3px;transition:background .2s}
 .agent-cta:hover{background:var(--gold-lt)}
+.lead-form{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.lead-form input,.lead-form textarea{padding:10px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:13px;font-family:inherit;background:var(--white);color:var(--ink);resize:vertical}
+.lead-error{font-size:11.5px;color:#b83232;margin:-4px 0 0}
+.alert-success{background:#2e7d4f;color:#fff;padding:14px 0;font-size:13.5px;text-align:center}
 .footer{background:var(--ink);color:rgba(255,255,255,.45);padding:68px 0 0;margin-top:40px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1.7fr;gap:56px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.07)}
 @media (max-width:820px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
@@ -226,6 +265,12 @@ a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-
 .footer-social{display:flex;gap:10px;margin-top:20px}
 .footer-social a{width:34px;height:34px;border:1px solid rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.4)}
 .footer-bottom{padding:18px 0;text-align:center;font-size:11.5px;color:rgba(255,255,255,.18)}
+@media (max-width: 900px) {
+  .agent-card { position: static; margin-top: 8px; }
+  .gallery-main { height: 280px; }
+  .detail-stats { gap: 18px; }
+  .detail-title { font-size: 26px; }
+}
 </style>
 
 <footer class="footer" id="contacto">

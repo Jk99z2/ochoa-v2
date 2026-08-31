@@ -77,7 +77,7 @@ class TipoResource extends Resource
                 //
             ])
             ->recordActions([
-                EditAction::m1ake(),
+                EditAction::make(),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

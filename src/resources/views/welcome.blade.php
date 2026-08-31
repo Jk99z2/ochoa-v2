@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ochoa Real Estate Services - Manzanillo, Colima</title>
+  <meta name="description" content="Encuentra casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Ochoa Real Estate Services, tu inmobiliaria de confianza.">
+  <meta property="og:title" content="Ochoa Real Estate Services - Manzanillo, Colima">
+  <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
+  <meta property="og:type" content="website">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
   <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
@@ -20,6 +24,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 </head>
 <body>
+@if (session("success"))
+  <div class="alert-success"><div class="wrap">{{ session("success") }}</div></div>
+@endif
 
 <div class="topbar">
   <div class="wrap">
@@ -40,7 +47,15 @@
     <button class="nav-burger" id="burger">Menu</button>
     <ul class="nav-menu" id="nav-menu">
       <li><a href="/" class="active">Inicio</a></li>
-      <li><a href="#nuevas">Propiedades</a></li>
+      <li class="nav-drop">
+        <a href="{{ route("propiedades.index") }}">Propiedades</a>
+        <div class="nav-drop-panel">
+          <a href="{{ route("propiedades.index") }}">Todas</a>
+          @foreach ($navTipos as $navTipo)
+            <a href="{{ route("propiedades.index", ["tipo" => $navTipo->slug]) }}">{{ $navTipo->nombre }}</a>
+          @endforeach
+        </div>
+      </li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
   </div>
@@ -81,6 +96,38 @@
     <span id="hero-loc-text">{{ $destacadas->first()->ciudad ?? "Manzanillo" }}, Colima</span>
   </div>
 </section>
+<section class="hero-search-wrap">
+  <div class="wrap">
+    <form method="GET" action="{{ route("propiedades.index") }}" class="hero-search">
+      <div class="hs-field">
+        <label>Tipo</label>
+        <select name="tipo">
+          <option value="">Todos</option>
+          @foreach ($navTipos as $navTipo)
+            <option value="{{ $navTipo->slug }}">{{ $navTipo->nombre }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="hs-field">
+        <label>Operacion</label>
+        <select name="operacion">
+          <option value="">Todas</option>
+          <option value="venta">Venta</option>
+          <option value="renta">Renta</option>
+        </select>
+      </div>
+      <div class="hs-field">
+        <label>Ciudad</label>
+        <input type="text" name="ciudad" placeholder="Manzanillo">
+      </div>
+      <div class="hs-field">
+        <label>Precio maximo</label>
+        <input type="number" name="max_price" placeholder="Sin limite">
+      </div>
+      <button type="submit" class="hs-submit">Buscar</button>
+    </form>
+  </div>
+</section>
 
 <style>
 :root { --ink: #111010; --gold: #b8872a; --gold-lt: #d4a84b; --cream: #f5f1ea; --warm: #ede8de; --muted: #7a7468; --white: #ffffff; --border: rgba(184,135,42,.18); --ease: cubic-bezier(.4,0,.2,1); }
@@ -110,7 +157,7 @@ ul { list-style: none; }
 .nav-menu li a:hover { color: #fff; background: rgba(255,255,255,.07); }
 .nav-menu li a.active { color: var(--gold-lt); }
 .nav-drop { position: relative; }
-.nav-drop-panel { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: #1a1918; border: 1px solid var(--border); border-radius: 4px; min-width: 190px; padding: 6px 0; box-shadow: 0 16px 40px rgba(0,0,0,.4); z-index: 10; }
+.nav-drop-panel { display: none; position: absolute; top: 100%; left: 0; background: #1a1918; border: 1px solid var(--border); border-radius: 4px; min-width: 190px; padding: 6px 0; box-shadow: 0 16px 40px rgba(0,0,0,.4); z-index: 10; }
 .nav-drop:hover .nav-drop-panel { display: block; }
 .nav-drop-panel a { display: block; padding: 8px 18px; font-size: 12.5px; color: rgba(255,255,255,.6) !important; border-radius: 0 !important; background: none !important; }
 .nav-drop-panel a:hover { background: rgba(184,135,42,.12) !important; color: #fff !important; }
@@ -152,6 +199,15 @@ ul { list-style: none; }
 .hero-loc { position: absolute; bottom: 24px; right: 24px; z-index: 3; font-size: 11px; color: rgba(255,255,255,.4); display: flex; align-items: center; gap: 5px; letter-spacing: .4px; }
 .hero-loc .icon-my_location { color: var(--gold); font-size: 11px; }
 @media (max-width:560px) { .hero-loc { display: none; } }
+.hero-search-wrap { position: relative; z-index: 5; margin-top: -40px; margin-bottom: 40px; }
+.hero-search { background: var(--white); border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,.15); padding: 24px; display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 16px; align-items: end; }
+@media (max-width: 900px) { .hero-search { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .hero-search { grid-template-columns: 1fr; } }
+.hs-field { display: flex; flex-direction: column; }
+.hs-field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
+.hs-field select, .hs-field input { padding: 10px; border: 1px solid rgba(0,0,0,.12); border-radius: 4px; font-size: 13.5px; font-family: inherit; background: var(--white); color: var(--ink); }
+.hs-submit { background: var(--gold); color: #fff; border: none; padding: 12px 28px; border-radius: 4px; font-size: 12px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: background .2s; white-space: nowrap; }
+.hs-submit:hover { background: var(--gold-lt); }
 .features { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--border); gap: 1px; border: 1px solid var(--border); }
 @media (max-width:860px) { .features { grid-template-columns: repeat(2,1fr); } }
 @media (max-width:480px) { .features { grid-template-columns: 1fr; } }
@@ -216,6 +272,28 @@ ul { list-style: none; }
 #loader.gone { opacity: 0; pointer-events: none; }
 .loader-ring { width: 34px; height: 34px; border: 2px solid var(--warm); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) {
+  .hero-search-wrap { margin-top: -24px; }
+  .hero-search { padding: 16px; gap: 12px; }
+  .hs-submit { padding: 12px; }
+  .section { padding: 48px 0; }
+  .features { grid-template-columns: 1fr; }
+  .hero-title { font-size: 28px; }
+  .hero-desc { -webkit-line-clamp: 3; }
+}
+.contact-section{padding:70px 0;background:var(--cream)}
+.contact-lead{font-size:14px;color:var(--muted);margin:12px 0 28px}
+.contact-form{max-width:600px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media (max-width:560px){.cf-row{grid-template-columns:1fr}}
+.contact-form input,.contact-form textarea{width:100%;padding:11px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:13.5px;font-family:inherit;background:var(--white);color:var(--ink);resize:vertical}
+.contact-form textarea{margin-bottom:14px}
+.lead-error{font-size:11.5px;color:#b83232;margin:-8px 0 14px}
+.alert-success{background:#2e7d4f;color:#fff;padding:14px 0;font-size:13.5px;text-align:center}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:stretch}
+@media (max-width:820px){.contact-grid{grid-template-columns:1fr}}
+.contact-col-map{min-height:360px;border-radius:6px;overflow:hidden}
+.contact-col-map iframe{width:100%;height:100%;min-height:360px;display:block}
 </style>
 
 <div class="features">
@@ -306,7 +384,33 @@ ul { list-style: none; }
     @endforeach
   </div>
 </section>
-
+<section class="contact-section" id="contacto-form">
+  <div class="wrap contact-grid">
+    <div class="contact-col-form">
+      <div class="section-eyebrow">Contacto</div>
+      <h2 class="section-title">Preguntanos por <em>otras propiedades</em></h2>
+      <p class="contact-lead">Cuentanos que buscas y un agente te contactara pronto.</p>
+      <form method="POST" action="{{ route("leads.store") }}" class="contact-form">
+        @csrf
+        <input type="text" name="website" value="" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="form_time" value="{{ time() }}">
+        <div class="cf-row">
+          <input type="text" name="nombre" placeholder="Tu nombre" required>
+          <input type="email" name="email" placeholder="Tu email">
+        </div>
+        <div class="cf-row">
+          <input type="tel" name="telefono" placeholder="Tu telefono">
+        </div>
+        <textarea name="mensaje" placeholder="Que tipo de propiedad buscas?" rows="4"></textarea>
+        @error("nombre")<p class="lead-error">{{ $message }}</p>@enderror
+        <button type="submit" class="hs-submit">Enviar mensaje</button>
+      </form>
+    </div>
+    <div class="contact-col-map">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.64158717555!2d-104.34025772615286!3d19.123373182091004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8424d6f477753ddd%3A0x9d69d8cca9a055c!2sOchoa%20Real%20Estate%20Services!5e0!3m2!1ses-419!2smx!4v1788215607104!5m2!1ses-419!2smx" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+</section>
 <footer class="footer" id="contacto">
   <div class="wrap">
     <div class="footer-grid">
