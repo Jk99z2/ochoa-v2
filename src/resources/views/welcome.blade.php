@@ -9,7 +9,6 @@
   <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
   <meta property="og:type" content="website">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
   <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
   <link rel="stylesheet" href="/css/animate.css">
   <link rel="stylesheet" href="/css/owl.carousel.min.css">
@@ -21,7 +20,7 @@
   <link rel="stylesheet" href="/css/icomoon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="/logos/logochoa.png" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
 </head>
 <body>
 @if (session("success"))
