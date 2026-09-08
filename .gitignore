@@ -10,3 +10,4 @@
 /src/public/css/filament
 /src/public/fonts/filament
 .env.prod
+docker/nginx/default.conf
