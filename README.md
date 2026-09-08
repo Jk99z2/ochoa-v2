@@ -57,6 +57,8 @@ Key values for **local development**:
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8082
+
+**Must include the port (`:8082`).** `APP_URL=http://localhost` (no port) will make Filament's `FileUpload`/`Storage::url()` generate broken image links.
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306

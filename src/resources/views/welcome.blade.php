@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="/css/icomoon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="/logos/logochoa.png" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
 @if (session("success"))
@@ -132,7 +132,7 @@
 :root { --ink: #111010; --gold: #b8872a; --gold-lt: #d4a84b; --cream: #f5f1ea; --warm: #ede8de; --muted: #7a7468; --white: #ffffff; --border: rgba(184,135,42,.18); --ease: cubic-bezier(.4,0,.2,1); }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body { font-family: "DM Sans", sans-serif; background: var(--white); color: var(--ink); overflow-x: hidden; }
+body { font-family: "Inter", sans-serif; background: var(--white); color: var(--ink); overflow-x: hidden; }
 a { text-decoration: none; color: inherit; }
 img { display: block; max-width: 100%; }
 ul { list-style: none; }
@@ -149,7 +149,7 @@ ul { list-style: none; }
 .nav .wrap { height: 100%; display: flex; justify-content: space-between; align-items: center; position: relative; }
 .nav-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .nav-brand img { height: 32px; width: auto; }
-.nav-brand-text { font-family: "Cormorant Garamond", serif; font-size: 17px; font-weight: 600; color: #fff; line-height: 1.2; }
+.nav-brand-text { font-family: "Inter", sans-serif; font-size: 17px; font-weight: 600; color: #fff; line-height: 1.2; }
 .nav-brand-text em { color: var(--gold); font-style: normal; }
 .nav-menu { display: flex; align-items: center; gap: 2px; }
 .nav-menu li a { display: block; padding: 6px 12px; font-size: 12.5px; font-weight: 400; color: rgba(255,255,255,.6); letter-spacing: .2px; border-radius: 3px; transition: color .2s, background .2s; white-space: nowrap; }
@@ -184,9 +184,9 @@ ul { list-style: none; }
 .hero-text.active { opacity: 1; pointer-events: auto; }
 .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 16px; }
 .hero-tag::before { content: ""; width: 22px; height: 1px; background: var(--gold); display: block; }
-.hero-title { font-family: "Cormorant Garamond", serif; font-size: clamp(34px, 5vw, 64px); font-weight: 700; color: #fff; line-height: 1.08; letter-spacing: -.3px; margin-bottom: 14px; }
+.hero-title { font-family: "Inter", sans-serif; font-size: clamp(34px, 5vw, 64px); font-weight: 700; color: #fff; line-height: 1.08; letter-spacing: -.3px; margin-bottom: 14px; }
 .hero-desc { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.7; margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.hero-price { font-family: "Cormorant Garamond", serif; font-size: 26px; font-weight: 600; color: var(--gold-lt); display: block; margin-bottom: 26px; }
+.hero-price { font-family: "Inter", sans-serif; font-size: 26px; font-weight: 600; color: var(--gold-lt); display: block; margin-bottom: 26px; }
 .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #fff; font-size: 11.5px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; padding: 13px 26px; border-radius: 2px; transition: background .25s, transform .25s; }
 .hero-cta:hover { background: var(--gold-lt); color: #fff; transform: translateY(-2px); }
 .hero-cta-arrow { display: inline-block; width: 16px; height: 1px; background: rgba(255,255,255,.7); position: relative; vertical-align: middle; transition: width .25s; }
@@ -212,17 +212,17 @@ ul { list-style: none; }
 @media (max-width:480px) { .features { grid-template-columns: 1fr; } }
 .feature { background: var(--white); padding: 36px 26px; transition: background .25s; }
 .feature:hover { background: var(--cream); }
-.feature-num { font-family: "Cormorant Garamond", serif; font-size: 44px; font-weight: 700; color: var(--gold); opacity: .2; line-height: 1; margin-bottom: 14px; }
+.feature-num { font-family: "Inter", sans-serif; font-size: 44px; font-weight: 700; color: var(--gold); opacity: .2; line-height: 1; margin-bottom: 14px; }
 .feature-icon { width: 42px; height: 42px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 .feature-icon span { font-size: 17px; color: var(--gold); }
-.feature h3 { font-family: "Cormorant Garamond", serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.feature h3 { font-family: "Inter", sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
 .feature p { font-size: 13px; color: var(--muted); line-height: 1.65; }
 .section { padding: 80px 0; }
 .section-alt { background: var(--cream); }
 .section-warm { background: var(--warm); }
 .section-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; }
 .section-eyebrow::after { content: ""; height: 1px; background: var(--border); width: 48px; }
-.section-title { font-family: "Cormorant Garamond", serif; font-size: clamp(26px, 3.2vw, 42px); font-weight: 700; color: var(--ink); line-height: 1.15; }
+.section-title { font-family: "Inter", sans-serif; font-size: clamp(26px, 3.2vw, 42px); font-weight: 700; color: var(--ink); line-height: 1.15; }
 .section-title em { color: var(--gold); font-style: italic; }
 .prop-card { background: var(--white); border: 1px solid rgba(0,0,0,.07); overflow: hidden; transition: box-shadow .3s var(--ease), transform .3s var(--ease); }
 .prop-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,.1); transform: translateY(-4px); }
@@ -231,11 +231,11 @@ ul { list-style: none; }
 .prop-card:hover .prop-img img { transform: scale(1.06); }
 .prop-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #fff; font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; }
 .prop-body { padding: 18px 18px 16px; }
-.prop-body h3 { font-family: "Cormorant Garamond", serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prop-body h3 { font-family: "Inter", sans-serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .prop-body h3 a { color: inherit; transition: color .2s; }
 .prop-body h3 a:hover { color: var(--gold); }
 .prop-cat { font-size: 11.5px; color: var(--muted); margin-bottom: 12px; }
-.prop-price { font-family: "Cormorant Garamond", serif; font-size: 21px; font-weight: 600; color: var(--gold); }
+.prop-price { font-family: "Inter", sans-serif; font-size: 21px; font-weight: 600; color: var(--gold); }
 .prop-meta { display: flex; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,.06); font-size: 11.5px; color: var(--muted); }
 .prop-meta span { display: flex; align-items: center; gap: 4px; }
 .prop-meta i { color: var(--gold); font-size: 12px; }
@@ -256,7 +256,7 @@ ul { list-style: none; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1.7fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,.07); }
 @media (max-width:820px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
 @media (max-width:480px) { .footer-grid { grid-template-columns: 1fr; } }
-.footer h4 { font-family: "Cormorant Garamond", serif; font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 18px; }
+.footer h4 { font-family: "Inter", sans-serif; font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 18px; }
 .footer p { font-size: 13px; line-height: 1.75; }
 .footer-links li { margin-bottom: 9px; }
 .footer-links a { font-size: 13px; color: rgba(255,255,255,.4); transition: color .2s; }
