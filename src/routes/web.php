@@ -105,6 +105,11 @@ Route::post("/leads", function (Request $request) {
         return back()->withErrors(["nombre" => "Por favor intenta de nuevo."])->withInput();
     }
 
+    $spamText = strtolower(($request->input("mensaje", "") . " " . $request->input("nombre", "")));
+        if (preg_match("#https?://|www\.|unsubscribe|seo\s|marketing\s+service|\bsms\b|lead\s+generation#i", $spamText)) {
+        return back()->with("success", "Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.");
+    }
+
     $validated = $request->validate([
         "nombre" => "required|string|max:120",
         "email" => "nullable|email|max:120",
