@@ -55,7 +55,10 @@ return new class extends Migration
             $t->index(['publicada','estado','operacion']);
             $t->index(['tipo_id','precio']);
             $t->index(['ciudad','colonia']);
-            $t->fullText(['titulo','descripcion']);
+
+            if (Schema::getConnection()->getDriverName() !== 'sqlite') {
+                $t->fullText(['titulo','descripcion']);
+            }
         });
     }
 
