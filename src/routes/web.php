@@ -82,7 +82,7 @@ Route::get("/propiedades", function (Request $request) {
     return view("propiedades.index", compact("propiedades", "navTipos"));
 })->name("propiedades.index");
 
-Route::get("/propiedades/{slug}", function (string $slug) {
+Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Request $request) {
     $navTipos = Tipo::orderBy("orden")->get();
 
     $propiedad = Propiedad::where("slug", $slug)
@@ -92,7 +92,12 @@ Route::get("/propiedades/{slug}", function (string $slug) {
         }])
         ->firstOrFail();
 
-    return view("propiedades.show", compact("propiedad", "navTipos"));
+    $referrerAgenteId = null;
+    if ($request->filled("agente")) {
+        $referrerAgenteId = \App\Models\Agente::where("id", $request->input("agente"))->value("id");
+    }
+
+    return view("propiedades.show", compact("propiedad", "navTipos", "referrerAgenteId"));
 })->name("propiedades.show");
 
 Route::post("/leads", function (Request $request) {
@@ -116,10 +121,12 @@ Route::post("/leads", function (Request $request) {
         "telefono" => "nullable|string|max:30",
         "mensaje" => "nullable|string",
         "propiedad_id" => "nullable|exists:propiedades,id",
+        "agente_id" => "nullable|exists:agentes,id",
     ]);
 
     \App\Models\Lead::create([
         "propiedad_id" => $validated["propiedad_id"] ?? null,
+        "agente_id" => $validated["agente_id"] ?? null,
         "nombre" => $validated["nombre"],
         "email" => $validated["email"] ?? null,
         "telefono" => $validated["telefono"] ?? null,

@@ -26,6 +26,12 @@ class LeadsTable
                     ->sortable()
                     ->limit(30),
 
+                TextColumn::make("agente.nombre")
+                    ->label("Agente")
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder("Sin asignar"),
+
                 TextColumn::make("email")
                     ->label("Email")
                     ->searchable(),
@@ -74,6 +80,12 @@ class LeadsTable
                         "cerrado" => "Cerrado",
                         "perdido" => "Perdido",
                     ]),
+
+                SelectFilter::make("agente_id")
+                    ->label("Agente")
+                    ->relationship("agente", "nombre")
+                    ->searchable()
+                    ->preload(),
 
                 SelectFilter::make("origen")
                     ->label("Origen")

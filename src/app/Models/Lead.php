@@ -12,6 +12,7 @@ class Lead extends Model
 
     protected $fillable = [
         "propiedad_id",
+        "agente_id",
         "nombre",
         "email",
         "telefono",
@@ -23,5 +24,10 @@ class Lead extends Model
     public function propiedad(): BelongsTo
     {
         return $this->belongsTo(Propiedad::class);
+    }
+
+    public function agente(): BelongsTo
+    {
+        return $this->belongsTo(Agente::class);
     }
 }

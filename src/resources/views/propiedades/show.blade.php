@@ -170,6 +170,7 @@
           <input type="text" name="website" value="" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
           <input type="hidden" name="form_time" value="{{ time() }}">
           <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+          <input type="hidden" name="agente_id" value="{{ $referrerAgenteId }}">
           <input type="text" name="nombre" placeholder="Tu nombre" required>
           <input type="email" name="email" placeholder="Tu email">
           <input type="tel" name="telefono" placeholder="Tu telefono">

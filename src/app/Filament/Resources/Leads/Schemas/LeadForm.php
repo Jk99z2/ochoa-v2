@@ -20,6 +20,13 @@ class LeadForm
                     ->preload()
                     ->nullable(),
 
+                Select::make("agente_id")
+                    ->label("Agente (credito de referido)")
+                    ->relationship("agente", "nombre")
+                    ->searchable()
+                    ->preload()
+                    ->nullable(),
+
                 TextInput::make("nombre")
                     ->label("Nombre")
                     ->required()
