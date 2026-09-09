@@ -20,7 +20,7 @@ class Propiedad extends Model
         'agente_id', 'municipio_id', 'tipo_id', 'titulo', 'slug', 'descripcion', 'operacion',
         'precio', 'moneda', 'mantenimiento', 'estado', 'publicada', 'destacada',
         'm2_terreno', 'm2_construccion', 'recamaras', 'banios', 'niveles',
-        'estacionamientos', 'antiguedad', 'calle', 'colonia', 'ciudad',
+        'estacionamientos', 'antiguedad', 'calle', 'colonia',
         'estado_mx', 'cp', 'lat', 'lng', 'ocultar_direccion', 'video_url',
         'tour_url', 'expediente', 'vistas', 'published_at',
     ];
