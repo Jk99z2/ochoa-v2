@@ -19,7 +19,7 @@ class LeadController extends Controller
             return back()->withErrors(['nombre' => 'Por favor intenta de nuevo.'])->withInput();
         }
 
-        $spamText = strtolower($request->input('mensaje', '') . ' ' . $request->input('nombre', ''));
+        $spamText = strtolower($request->input('mensaje', '').' '.$request->input('nombre', ''));
         if (preg_match('#https?://|www\.|unsubscribe|seo\s|marketing\s+service|\bsms\b|lead\s+generation#i', $spamText)) {
             return $this->genericSuccess();
         }
