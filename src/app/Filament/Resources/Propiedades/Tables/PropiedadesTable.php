@@ -22,6 +22,11 @@ class PropiedadesTable
     {
         return $table
             ->columns([
+                TextColumn::make("clave")
+                    ->label("Clave")
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make("titulo")
                     ->label("Título")
                     ->searchable()
@@ -68,9 +73,10 @@ class PropiedadesTable
                     ->label("Destacada")
                     ->boolean(),
 
-                TextColumn::make("ciudad")
-                    ->label("Ciudad")
+                TextColumn::make("municipio.nombre")
+                    ->label("Municipio")
                     ->searchable()
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make("created_at")

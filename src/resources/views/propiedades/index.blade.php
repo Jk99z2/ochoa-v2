@@ -54,8 +54,13 @@
         </div>
 
         <div class="filter-group">
-          <label>Ciudad</label>
-          <input type="text" name="ciudad" value="{{ request("ciudad") }}" placeholder="Manzanillo">
+          <label>Municipio</label>
+          <select name="municipio">
+            <option value="">Todos</option>
+            @foreach ($navMunicipios as $navMunicipio)
+              <option value="{{ $navMunicipio->clave }}" @selected(request("municipio") === $navMunicipio->clave)>{{ $navMunicipio->nombre }}</option>
+            @endforeach
+          </select>
         </div>
 
         <div class="filter-group">
@@ -69,7 +74,7 @@
         </div>
 
         <button type="submit" class="filter-submit">Aplicar filtros</button>
-        @if (request()->anyFilled(["tipo", "operacion", "ciudad", "min_price", "max_price"]))
+        @if (request()->anyFilled(["tipo", "operacion", "municipio", "min_price", "max_price"]))
           <a href="{{ route("propiedades.index") }}" class="filter-clear">Limpiar filtros</a>
         @endif
       </form>
@@ -100,7 +105,7 @@
               </div>
               <div class="prop-body">
                 <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
-                <p class="prop-cat">{{ $p->tipo?->nombre }} - {{ $p->ciudad }}</p>
+                <p class="prop-cat">{{ $p->tipo?->nombre }} - {{ $p->municipio?->nombre }}</p>
                 <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
                 <div class="prop-meta">
                   @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif

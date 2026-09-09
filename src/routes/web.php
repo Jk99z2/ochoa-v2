@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LeadController;
+use App\Models\Municipio;
 use App\Models\Propiedad;
 use App\Models\Tipo;
 use Illuminate\Http\Request;
@@ -8,10 +9,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/", function () {
     $navTipos = Tipo::orderBy("orden")->get();
+    $navMunicipios = Municipio::orderBy("orden")->get();
 
     $destacadas = Propiedad::where("publicada", true)
         ->where("destacada", true)
-        ->with(["tipo", "imagenes" => function ($query) {
+        ->with(["tipo", "municipio", "imagenes" => function ($query) {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->latest()
@@ -20,7 +22,7 @@ Route::get("/", function () {
 
     if ($destacadas->isEmpty()) {
         $destacadas = Propiedad::where("publicada", true)
-            ->with(["tipo", "imagenes" => function ($query) {
+            ->with(["tipo", "municipio", "imagenes" => function ($query) {
                 $query->orderByDesc("principal")->orderBy("orden");
             }])
             ->latest()
@@ -29,7 +31,7 @@ Route::get("/", function () {
     }
 
     $nuevas = Propiedad::where("publicada", true)
-        ->with(["tipo", "imagenes" => function ($query) {
+        ->with(["tipo", "municipio", "imagenes" => function ($query) {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->latest()
@@ -38,21 +40,22 @@ Route::get("/", function () {
 
     $recomendadas = Propiedad::where("publicada", true)
         ->where("destacada", true)
-        ->with(["tipo", "imagenes" => function ($query) {
+        ->with(["tipo", "municipio", "imagenes" => function ($query) {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->latest()
         ->take(4)
         ->get();
 
-    return view("welcome", compact("destacadas", "nuevas", "recomendadas", "navTipos"));
+    return view("welcome", compact("destacadas", "nuevas", "recomendadas", "navTipos", "navMunicipios"));
 });
 
 Route::get("/propiedades", function (Request $request) {
     $navTipos = Tipo::orderBy("orden")->get();
+    $navMunicipios = Municipio::orderBy("orden")->get();
 
     $query = Propiedad::where("publicada", true)
-        ->with(["tipo", "imagenes" => function ($q) {
+        ->with(["tipo", "municipio", "imagenes" => function ($q) {
             $q->orderByDesc("principal")->orderBy("orden");
         }]);
 
@@ -74,13 +77,15 @@ Route::get("/propiedades", function (Request $request) {
         $query->where("precio", "<=", $request->max_price);
     }
 
-    if ($request->filled("ciudad")) {
-        $query->where("ciudad", "like", "%" . $request->ciudad . "%");
+    if ($request->filled("municipio")) {
+        $query->whereHas("municipio", function ($q) use ($request) {
+            $q->where("clave", $request->municipio);
+        });
     }
 
     $propiedades = $query->latest()->paginate(9)->withQueryString();
 
-    return view("propiedades.index", compact("propiedades", "navTipos"));
+    return view("propiedades.index", compact("propiedades", "navTipos", "navMunicipios"));
 })->name("propiedades.index");
 
 Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Request $request) {
@@ -88,7 +93,7 @@ Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Reque
 
     $propiedad = Propiedad::where("slug", $slug)
         ->where("publicada", true)
-        ->with(["agente", "tipo", "amenidades", "imagenes" => function ($query) {
+        ->with(["agente", "tipo", "municipio", "amenidades", "imagenes" => function ($query) {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->firstOrFail();

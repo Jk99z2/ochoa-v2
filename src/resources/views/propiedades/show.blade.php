@@ -60,7 +60,10 @@
           <span class="prop-badge">Destacada</span>
         @endif
         <h1 class="detail-title">{{ $propiedad->titulo }}</h1>
-        <p class="detail-loc">{{ $propiedad->colonia }}@if($propiedad->colonia && $propiedad->ciudad), @endif{{ $propiedad->ciudad }}, {{ $propiedad->estado_mx }}</p>
+        @if ($propiedad->clave)
+          <p class="detail-ref">Ref: {{ $propiedad->clave }}</p>
+        @endif
+        <p class="detail-loc">{{ $propiedad->colonia }}@if($propiedad->colonia && $propiedad->municipio), @endif{{ $propiedad->municipio?->nombre }}, {{ $propiedad->estado_mx }}</p>
         <span class="detail-price">
           ${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}
           @if ($propiedad->operacion === "renta")<span class="detail-price-period">/mes</span>@endif
@@ -106,10 +109,10 @@
             src="https://www.google.com/maps?q={{ $propiedad->lat }},{{ $propiedad->lng }}&output=embed">
           </iframe>
         </div>
-      @elseif ($propiedad->ciudad)
+      @elseif ($propiedad->municipio)
         <div class="detail-section">
           <h2 class="detail-subtitle">Ubicacion</h2>
-          <p class="detail-desc">{{ $propiedad->colonia }}@if($propiedad->colonia), @endif{{ $propiedad->ciudad }}, {{ $propiedad->estado_mx }}</p>
+          <p class="detail-desc">{{ $propiedad->colonia }}@if($propiedad->colonia), @endif{{ $propiedad->municipio->nombre }}, {{ $propiedad->estado_mx }}</p>
         </div>
       @endif
     </div>
