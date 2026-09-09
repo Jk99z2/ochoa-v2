@@ -92,6 +92,12 @@ Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Reque
         }])
         ->firstOrFail();
 
+    $viewedKey = "viewed_propiedad_" . $propiedad->id;
+    if (! $request->session()->has($viewedKey)) {
+        $propiedad->increment("vistas");
+        $request->session()->put($viewedKey, true);
+    }
+
     $referrerAgente = null;
     if ($request->filled("agente")) {
         $referrerAgente = \App\Models\Agente::find($request->input("agente"));
