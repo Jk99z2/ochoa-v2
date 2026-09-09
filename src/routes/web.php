@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeadController;
 use App\Models\Propiedad;
 use App\Models\Tipo;
 use Illuminate\Http\Request;
@@ -106,40 +107,4 @@ Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Reque
     return view("propiedades.show", compact("propiedad", "navTipos", "referrerAgente"));
 })->name("propiedades.show");
 
-Route::post("/leads", function (Request $request) {
-    if (!empty($request->input("website"))) {
-        return back()->with("success", "Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.");
-    }
-
-    $formTime = (int) $request->input("form_time", 0);
-    if ($formTime > 0 && (time() - $formTime) < 3) {
-        return back()->withErrors(["nombre" => "Por favor intenta de nuevo."])->withInput();
-    }
-
-    $spamText = strtolower(($request->input("mensaje", "") . " " . $request->input("nombre", "")));
-        if (preg_match("#https?://|www\.|unsubscribe|seo\s|marketing\s+service|\bsms\b|lead\s+generation#i", $spamText)) {
-        return back()->with("success", "Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.");
-    }
-
-    $validated = $request->validate([
-        "nombre" => "required|string|max:120",
-        "email" => "nullable|email|max:120",
-        "telefono" => "nullable|string|max:30",
-        "mensaje" => "nullable|string",
-        "propiedad_id" => "nullable|exists:propiedades,id",
-        "agente_id" => "nullable|exists:agentes,id",
-    ]);
-
-    \App\Models\Lead::create([
-        "propiedad_id" => $validated["propiedad_id"] ?? null,
-        "agente_id" => $validated["agente_id"] ?? null,
-        "nombre" => $validated["nombre"],
-        "email" => $validated["email"] ?? null,
-        "telefono" => $validated["telefono"] ?? null,
-        "mensaje" => $validated["mensaje"] ?? null,
-        "origen" => "formulario",
-        "estatus" => "nuevo",
-    ]);
-
-    return back()->with("success", "Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.");
-})->name("leads.store")->middleware("throttle:5,1");
+Route::post("/leads", [LeadController::class, "store"])->name("leads.store")->middleware("throttle:5,1");
