@@ -22,6 +22,31 @@ class AgenteResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nombre';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->is_admin ?? false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->is_admin ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->is_admin ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->is_admin ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->is_admin ?? false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return AgenteForm::configure($schema);
