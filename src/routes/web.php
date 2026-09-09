@@ -92,12 +92,12 @@ Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Reque
         }])
         ->firstOrFail();
 
-    $referrerAgenteId = null;
+    $referrerAgente = null;
     if ($request->filled("agente")) {
-        $referrerAgenteId = \App\Models\Agente::where("id", $request->input("agente"))->value("id");
+        $referrerAgente = \App\Models\Agente::find($request->input("agente"));
     }
 
-    return view("propiedades.show", compact("propiedad", "navTipos", "referrerAgenteId"));
+    return view("propiedades.show", compact("propiedad", "navTipos", "referrerAgente"));
 })->name("propiedades.show");
 
 Route::post("/leads", function (Request $request) {

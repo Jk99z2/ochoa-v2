@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class LeadResource extends Resource
 {
@@ -20,7 +21,22 @@ class LeadResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'nombre';
+    protected static ?string $recordTitleAttribute = "nombre";
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+
+        if ($user && ! $user->is_admin) {
+            $agenteId = $user->agente?->id;
+
+            return $query->where("agente_id", $agenteId ?? -1);
+        }
+
+        return $query;
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -42,9 +58,9 @@ class LeadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListLeads::route('/'),
-            'create' => CreateLead::route('/create'),
-            'edit' => EditLead::route('/{record}/edit'),
+            "index" => ListLeads::route("/"),
+            "create" => CreateLead::route("/create"),
+            "edit" => EditLead::route("/{record}/edit"),
         ];
     }
 }

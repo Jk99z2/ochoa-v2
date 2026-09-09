@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Propiedades\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -105,6 +107,22 @@ class PropiedadesTable
                     ]),
             ])
             ->recordActions([
+                Action::make("miEnlace")
+                    ->label("Mi enlace")
+                    ->icon("heroicon-o-link")
+                    ->visible(fn () => auth()->user()?->agente !== null)
+                    ->schema(fn ($record) => [
+                        TextInput::make("enlace")
+                            ->label("Comparte este enlace para recibir el credito del lead")
+                            ->default(
+                                rtrim(config("app.url"), "/") . "/propiedades/" . $record->slug . "?agente=" . auth()->user()->agente->id
+                            )
+                            ->readOnly()
+                            ->extraInputAttributes(["onclick" => "this.select()"]),
+                    ])
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel("Cerrar"),
+
                 ViewAction::make(),
                 EditAction::make(),
             ])

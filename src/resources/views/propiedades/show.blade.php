@@ -147,19 +147,20 @@
     <aside class="detail-sidebar">
       <div class="agent-card">
         <h3 class="agent-card-title">Contacta al agente</h3>
-        @if ($propiedad->agente)
+        @php $displayAgente = $referrerAgente ?? $propiedad->agente; @endphp
+        @if ($displayAgente)
           <div class="agent-info">
-            @if ($propiedad->agente->foto)
-              <img src="{{ Storage::url($propiedad->agente->foto) }}" alt="{{ $propiedad->agente->nombre }}" class="agent-photo">
+            @if ($displayAgente->foto)
+              <img src="{{ Storage::url($displayAgente->foto) }}" alt="{{ $displayAgente->nombre }}" class="agent-photo">
             @endif
             <div>
-              <p class="agent-name">{{ $propiedad->agente->nombre }}</p>
-              @if ($propiedad->agente->telefono)<p class="agent-contact">{{ $propiedad->agente->telefono }}</p>@endif
-              @if ($propiedad->agente->email)<p class="agent-contact">{{ $propiedad->agente->email }}</p>@endif
+              <p class="agent-name">{{ $displayAgente->nombre }}</p>
+              @if ($displayAgente->telefono)<p class="agent-contact">{{ $displayAgente->telefono }}</p>@endif
+              @if ($displayAgente->email)<p class="agent-contact">{{ $displayAgente->email }}</p>@endif
             </div>
           </div>
-          @if ($propiedad->agente->whatsapp)
-            <a href="https://wa.me/{{ preg_replace("/[^0-9]/", "", $propiedad->agente->whatsapp) }}" target="_blank" class="agent-cta">Contactar por WhatsApp</a>
+          @if ($displayAgente->whatsapp)
+            <a href="https://wa.me/{{ preg_replace("/[^0-9]/", "", $displayAgente->whatsapp) }}" target="_blank" class="agent-cta">Contactar por WhatsApp</a>
           @endif
         @else
           <p class="agent-contact">+52 (314) 333-3202</p>
@@ -170,7 +171,7 @@
           <input type="text" name="website" value="" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
           <input type="hidden" name="form_time" value="{{ time() }}">
           <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
-          <input type="hidden" name="agente_id" value="{{ $referrerAgenteId }}">
+          <input type="hidden" name="agente_id" value="{{ $referrerAgente?->id }}">
           <input type="text" name="nombre" placeholder="Tu nombre" required>
           <input type="email" name="email" placeholder="Tu email">
           <input type="tel" name="telefono" placeholder="Tu telefono">
