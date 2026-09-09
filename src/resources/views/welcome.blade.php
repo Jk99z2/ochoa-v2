@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ochoa Real Estate Services - Manzanillo, Colima</title>
+  <title>{{ $siteConfig->nombre_sitio }} - Manzanillo, Colima</title>
   <meta name="description" content="Encuentra casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Ochoa Real Estate Services, tu inmobiliaria de confianza.">
   <meta property="og:title" content="Ochoa Real Estate Services - Manzanillo, Colima">
   <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/css/flaticon.css">
   <link rel="stylesheet" href="/css/icomoon.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="icon" href="/logos/logochoa.png" type="image/x-icon">
+  <link rel="icon" href="{{ $siteConfig->favicon_path ? Storage::url($siteConfig->favicon_path) : '/logos/logochoa.png' }}" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -29,10 +29,11 @@
 
 <div class="topbar">
   <div class="wrap">
-    <a href="https://www.facebook.com/ochoainmobiliaria/" target="_blank"><span class="icon-facebook"></span> Facebook</a>
+    @if ($siteConfig->facebook_url)<a href="{{ $siteConfig->facebook_url }}" target="_blank"><span class="icon-facebook"></span> Facebook</a>@endif
     <div class="phones">
-      <span>+52 (314) 333-3202</span>
-      <span>+52 (314) 376-9162</span>
+      <span class="phones-label">Contacto:</span>
+      <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteConfig->telefono_oficina) }}">{{ $siteConfig->telefono_oficina }}</a>
+      <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteConfig->telefono_celular) }}">{{ $siteConfig->telefono_celular }}</a>
     </div>
   </div>
 </div>
@@ -40,8 +41,8 @@
 <nav class="nav">
   <div class="wrap">
     <a href="/" class="nav-brand">
-      <img src="/logos/logochoa.png" alt="Ochoa Real Estate">
-      <div class="nav-brand-text">Ochoa Real <em>Estate</em></div>
+      <img src="{{ $siteConfig->logo_path ? Storage::url($siteConfig->logo_path) : '/logos/logochoa.png' }}" alt="{{ $siteConfig->nombre_sitio }}">
+      <div class="nav-brand-text">{{ $siteConfig->nombre_sitio }}</div>
     </a>
     <button class="nav-burger" id="burger">Menu</button>
     <ul class="nav-menu" id="nav-menu">
@@ -144,7 +145,7 @@ ul { list-style: none; }
 .topbar .phones { display: flex; gap: 20px; }
 .topbar .phones span { display: flex; align-items: center; gap: 5px; }
 .topbar .icon-phone { color: var(--gold); font-size: 10px; }
-@media (max-width:600px) { .topbar .phones span:last-child { display:none; } }
+@media (max-width:820px) { .topbar .phones a:last-child { display:none; } }
 .nav { position: sticky; top: 0; z-index: 900; height: 64px; background: rgba(17,16,16,.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
 .nav .wrap { height: 100%; display: flex; justify-content: space-between; align-items: center; position: relative; }
 .nav-brand { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -406,7 +407,7 @@ ul { list-style: none; }
       </form>
     </div>
     <div class="contact-col-map">
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.64158717555!2d-104.34025772615286!3d19.123373182091004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8424d6f477753ddd%3A0x9d69d8cca9a055c!2sOchoa%20Real%20Estate%20Services!5e0!3m2!1ses-419!2smx!4v1788215607104!5m2!1ses-419!2smx" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <iframe src="{{ $siteConfig->mapa_embed_url }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
   </div>
 </section>
@@ -414,10 +415,10 @@ ul { list-style: none; }
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <h4>Ochoa Real Estate Services</h4>
+        <h4>{{ $siteConfig->nombre_sitio }}</h4>
         <p>Gran variedad de bienes inmuebles en el Puerto de Manzanillo. Invertir en este hermoso lugar es siempre un acierto.</p>
         <div class="footer-social">
-          <a href="https://www.facebook.com/ochoainmobiliaria/" target="_blank"><span class="icon-facebook"></span></a>
+          @if ($siteConfig->facebook_url)<a href="{{ $siteConfig->facebook_url }}" target="_blank"><span class="icon-facebook"></span></a>@endif
         </div>
       </div>
       <div>
@@ -430,18 +431,18 @@ ul { list-style: none; }
       <div>
         <h4>Contactanos</h4>
         <ul class="footer-contact">
-          <li><span class="fi icon-map-marker"></span><span>Lluvia de Oro 57, Arboledas, 28869 Manzanillo, Col.</span></li>
-          <li><span class="fi icon-phone"></span><span>+52 (314) 333-3202 Oficina</span></li>
-          <li><span class="fi icon-phone"></span><span>+52 (314) 376-9162 Celular</span></li>
-          <li><span class="fi icon-envelope"></span><span>inmobiliariaochoa@hotmail.com</span></li>
-          <li><span class="fi"></span><span>Lun-Vie: 8:00-14:00 y 16:00-19:00<br>Sab: 9:00-14:00</span></li>
+          <li><span class="fi icon-map-marker"></span><span>{{ $siteConfig->direccion }}</span></li>
+          <li><span class="fi icon-phone"></span><a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteConfig->telefono_oficina) }}">{{ $siteConfig->telefono_oficina }} Oficina</a></li>
+          <li><span class="fi icon-phone"></span><a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteConfig->telefono_celular) }}">{{ $siteConfig->telefono_celular }} Celular</a></li>
+          <li><span class="fi icon-envelope"></span><a href="mailto:{{ $siteConfig->email_contacto }}">{{ $siteConfig->email_contacto }}</a></li>
+          <li><span class="fi"></span><span>{{ $siteConfig->horario }}</span></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
     <div class="wrap">
-      Todos los Derechos Reservados &copy; {{ date("Y") }} - Ochoa Real Estate Services
+      Todos los Derechos Reservados &copy; {{ date("Y") }} - {{ $siteConfig->nombre_sitio }}
     </div>
   </div>
 </footer>
