@@ -24,6 +24,8 @@
   <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
+<div id="loader"><div class="loader-ring"></div></div>
+
 @if (session("success"))
   <div class="alert-success"><div class="wrap">{{ session("success") }}</div></div>
 @endif
@@ -98,13 +100,16 @@
         <label>Precio maximo</label>
         <input type="number" name="max_price" placeholder="Sin limite">
       </div>
-      <button type="submit" class="hs-submit">Buscar</button>
+      <button type="submit" class="hs-submit">
+        <svg class="hs-submit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        Buscar
+      </button>
     </form>
   </div>
 </section>
 
 <style>
-:root { --ink: #111010; --gold: #b8872a; --gold-lt: #d4a84b; --cream: #f5f1ea; --warm: #ede8de; --muted: #7a7468; --white: #ffffff; --border: rgba(184,135,42,.18); --ease: cubic-bezier(.4,0,.2,1); }
+:root { --ink: #111010; --gold: #b8872a; --gold-lt: #d4a84b; --gold-soft: rgba(184,135,42,.1); --cream: #f5f1ea; --warm: #ede8de; --muted: #7a7468; --white: #ffffff; --border: rgba(184,135,42,.18); --radius: 14px; --radius-sm: 8px; --shadow-soft: 0 10px 30px rgba(17,16,16,.06); --shadow-lift: 0 20px 50px rgba(17,16,16,.12); --ease: cubic-bezier(.4,0,.2,1); }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body { font-family: "Inter", sans-serif; background: var(--white); color: var(--ink); overflow-x: hidden; }
@@ -157,13 +162,13 @@ ul { list-style: none; }
 .hero-text:first-child { position: relative; top: auto; left: auto; transform: none; visibility: hidden; }
 .hero-text:first-child.active { visibility: visible; }
 .hero-text.active { opacity: 1; pointer-events: auto; }
-.hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 16px; }
-.hero-tag::before { content: ""; width: 22px; height: 1px; background: var(--gold); display: block; }
+.hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 500; color: var(--gold-lt); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 16px; }
+.hero-tag::before { content: ""; width: 22px; height: 1px; background: var(--gold-lt); display: block; }
 .hero-title { font-family: "Inter", sans-serif; font-size: clamp(34px, 5vw, 64px); font-weight: 700; color: #fff; line-height: 1.08; letter-spacing: -.3px; margin-bottom: 14px; }
 .hero-desc { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.7; margin-bottom: 24px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .hero-price { font-family: "Inter", sans-serif; font-size: 26px; font-weight: 600; color: var(--gold-lt); display: block; margin-bottom: 26px; }
-.hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #fff; font-size: 11.5px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; padding: 13px 26px; border-radius: 2px; transition: background .25s, transform .25s; }
-.hero-cta:hover { background: var(--gold-lt); color: #fff; transform: translateY(-2px); }
+.hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #fff; font-size: 11.5px; font-weight: 500; letter-spacing: 1.2px; text-transform: uppercase; padding: 13px 26px; border-radius: 4px; transition: background .25s, transform .25s, box-shadow .25s; box-shadow: 0 10px 30px rgba(184,135,42,.25); }
+.hero-cta:hover { background: var(--gold-lt); color: #fff; transform: translateY(-2px); box-shadow: 0 14px 34px rgba(184,135,42,.35); }
 .hero-cta-arrow { display: inline-block; width: 16px; height: 1px; background: rgba(255,255,255,.7); position: relative; vertical-align: middle; transition: width .25s; }
 .hero-cta-arrow::after { content: ""; position: absolute; right: -1px; top: -3px; border: 4px solid transparent; border-left: 5px solid rgba(255,255,255,.7); }
 .hero-cta:hover .hero-cta-arrow { width: 22px; }
@@ -173,39 +178,48 @@ ul { list-style: none; }
 .hero-loc { position: absolute; bottom: 24px; right: 24px; z-index: 3; font-size: 11px; color: rgba(255,255,255,.4); display: flex; align-items: center; gap: 5px; letter-spacing: .4px; }
 .hero-loc .icon-my_location { color: var(--gold); font-size: 11px; }
 @media (max-width:560px) { .hero-loc { display: none; } }
-.hero-search-wrap { position: relative; z-index: 5; margin-top: -40px; margin-bottom: 40px; }
-.hero-search { background: var(--white); border-radius: 6px; box-shadow: 0 20px 50px rgba(0,0,0,.15); padding: 24px; display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 16px; align-items: end; }
-@media (max-width: 900px) { .hero-search { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .hero-search { grid-template-columns: 1fr; } }
-.hs-field { display: flex; flex-direction: column; }
-.hs-field label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 6px; }
-.hs-field select, .hs-field input { padding: 10px; border: 1px solid rgba(0,0,0,.12); border-radius: 4px; font-size: 13.5px; font-family: inherit; background: var(--white); color: var(--ink); }
-.hs-submit { background: var(--gold); color: #fff; border: none; padding: 12px 28px; border-radius: 4px; font-size: 12px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: background .2s; white-space: nowrap; }
-.hs-submit:hover { background: var(--gold-lt); }
-.features { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--border); gap: 1px; border: 1px solid var(--border); }
+.hero-search-wrap { position: relative; z-index: 5; margin-top: -44px; margin-bottom: 40px; }
+.hero-search { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lift); padding: 22px 26px; display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0; align-items: end; }
+@media (max-width: 900px) { .hero-search { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media (max-width: 560px) { .hero-search { grid-template-columns: 1fr; gap: 14px; } }
+.hs-field { display: flex; flex-direction: column; padding: 0 20px; border-left: 1px solid rgba(0,0,0,.07); }
+.hs-field:first-child { padding-left: 0; border-left: none; }
+@media (max-width: 900px) { .hs-field { border-left: none; padding: 0; } }
+.hs-field label { font-size: 10.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 8px; }
+.hs-field select, .hs-field input { border: none; padding: 4px 0; font-size: 14px; font-family: inherit; background: transparent; color: var(--ink); }
+.hs-field select:focus, .hs-field input:focus { outline: none; }
+@media (max-width: 900px) { .hs-field select, .hs-field input { border: 1px solid rgba(0,0,0,.12); border-radius: var(--radius-sm); padding: 10px; } }
+.hs-submit { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--gold); color: #fff; border: none; padding: 14px 28px; margin-left: 20px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: background .2s, transform .2s; white-space: nowrap; }
+.hs-submit:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.hs-submit-icon { width: 15px; height: 15px; flex-shrink: 0; }
+@media (max-width: 900px) { .hs-submit { margin-left: 0; grid-column: 1 / -1; padding: 13px; } }
+.features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 @media (max-width:860px) { .features { grid-template-columns: repeat(2,1fr); } }
 @media (max-width:480px) { .features { grid-template-columns: 1fr; } }
-.feature { background: var(--white); padding: 36px 26px; transition: background .25s; }
-.feature:hover { background: var(--cream); }
-.feature-num { font-family: "Inter", sans-serif; font-size: 44px; font-weight: 700; color: var(--gold); opacity: .2; line-height: 1; margin-bottom: 14px; }
-.feature-icon { width: 42px; height: 42px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
-.feature-icon span { font-size: 17px; color: var(--gold); }
-.feature h3 { font-family: "Inter", sans-serif; font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.feature { background: var(--white); border: 1px solid rgba(0,0,0,.06); border-radius: var(--radius); padding: 30px 26px; transition: box-shadow .3s var(--ease), transform .3s var(--ease), border-color .3s; }
+.feature:hover { box-shadow: var(--shadow-soft); transform: translateY(-4px); border-color: transparent; }
+.feature-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; transition: background .3s; }
+.feature:hover .feature-icon { background: var(--gold); }
+.feature-icon svg { width: 21px; height: 21px; color: var(--gold); transition: color .3s; }
+.feature:hover .feature-icon svg { color: #fff; }
+.feature h3 { font-family: "Inter", sans-serif; font-size: 16.5px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
 .feature p { font-size: 13px; color: var(--muted); line-height: 1.65; }
-.section { padding: 80px 0; }
+.section { padding: 88px 0; }
 .section-alt { background: var(--cream); }
 .section-warm { background: var(--warm); }
 .section-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 500; color: var(--gold); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; }
 .section-eyebrow::after { content: ""; height: 1px; background: var(--border); width: 48px; }
 .section-title { font-family: "Inter", sans-serif; font-size: clamp(26px, 3.2vw, 42px); font-weight: 700; color: var(--ink); line-height: 1.15; }
 .section-title em { color: var(--gold); font-style: italic; }
-.prop-card { background: var(--white); border: 1px solid rgba(0,0,0,.07); overflow: hidden; transition: box-shadow .3s var(--ease), transform .3s var(--ease); }
-.prop-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,.1); transform: translateY(-4px); }
+.section-desc { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 460px; margin-top: 14px; }
+.prop-card { background: var(--white); border: 1px solid rgba(0,0,0,.07); border-radius: var(--radius); overflow: hidden; transition: box-shadow .3s var(--ease), transform .3s var(--ease); }
+.prop-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-6px); }
 .prop-img { position: relative; overflow: hidden; height: 208px; background: var(--warm); }
 .prop-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
 .prop-card:hover .prop-img img { transform: scale(1.06); }
-.prop-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #fff; font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; }
-.prop-body { padding: 18px 18px 16px; }
+.prop-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: #fff; font-size: 9.5px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 30px; }
+.prop-municipio { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,.94); color: var(--ink); font-size: 9.5px; font-weight: 600; letter-spacing: .3px; border-radius: 30px; padding: 5px 12px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.prop-body { padding: 20px 20px 18px; }
 .prop-body h3 { font-family: "Inter", sans-serif; font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .prop-body h3 a { color: inherit; transition: color .2s; }
 .prop-body h3 a:hover { color: var(--gold); }
@@ -216,18 +230,19 @@ ul { list-style: none; }
 .prop-meta i { color: var(--gold); font-size: 12px; }
 .slider-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; gap: 16px; flex-wrap: wrap; }
 .slider-nav { display: flex; gap: 8px; }
-.slider-btn { width: 40px; height: 40px; border: 1px solid var(--border); background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 17px; color: var(--ink); transition: background .2s, color .2s, border-color .2s; flex-shrink: 0; }
-.slider-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+.slider-btn { width: 42px; height: 42px; border: 1px solid var(--border); background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 17px; color: var(--ink); transition: background .2s, color .2s, border-color .2s, box-shadow .2s; flex-shrink: 0; }
+.slider-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); box-shadow: 0 8px 20px rgba(184,135,42,.3); }
+.slider-btn:disabled { opacity: .35; cursor: default; box-shadow: none; }
+.slider-btn:disabled:hover { background: var(--white); color: var(--ink); border-color: var(--border); }
 .slider-outer { overflow: hidden; }
-.slider-track { display: flex; gap: 24px; transition: transform .45s var(--ease); will-change: transform; }
+.slider-track { display: flex; gap: 24px; transition: transform .5s var(--ease); will-change: transform; }
 .slider-track .prop-card { flex: 0 0 calc(33.333% - 16px); }
 @media (max-width:860px) { .slider-track .prop-card { flex: 0 0 calc(50% - 12px); } }
 @media (max-width:540px) { .slider-track .prop-card { flex: 0 0 100%; } }
-.recoms { display: grid; grid-template-columns: repeat(4,1fr); }
-.recoms .prop-card { border-radius: 0; border: none; border-right: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06); }
+.recoms { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
 @media (max-width:860px) { .recoms { grid-template-columns: repeat(2,1fr); } }
 @media (max-width:480px) { .recoms { grid-template-columns: 1fr; } }
-.footer { background: var(--ink); color: rgba(255,255,255,.45); padding: 68px 0 0; }
+.footer { background: var(--ink); color: rgba(255,255,255,.45); padding: 76px 0 0; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1.7fr; gap: 56px; padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,.07); }
 @media (max-width:820px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
 @media (max-width:480px) { .footer-grid { grid-template-columns: 1fr; } }
@@ -236,8 +251,8 @@ ul { list-style: none; }
 .footer-links li { margin-bottom: 9px; }
 .footer-links a { font-size: 13px; color: rgba(255,255,255,.4); transition: color .2s; }
 .footer-links a:hover { color: var(--gold-lt); }
-.footer-contact li { display: flex; gap: 10px; font-size: 13px; line-height: 1.65; margin-bottom: 11px; }
-.footer-contact .fi { color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+.footer-contact li { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; line-height: 1.65; margin-bottom: 14px; }
+.footer-contact .fi { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: rgba(184,135,42,.14); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 1px; }
 .footer-social { display: flex; gap: 10px; margin-top: 20px; }
 .footer-social a { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: rgba(255,255,255,.4); transition: border-color .2s, color .2s; }
 .footer-social a:hover { border-color: var(--gold); color: var(--gold); }
@@ -248,34 +263,61 @@ ul { list-style: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 640px) {
   .hero-search-wrap { margin-top: -24px; }
-  .hero-search { padding: 16px; gap: 12px; }
-  .hs-submit { padding: 12px; }
-  .section { padding: 48px 0; }
-  .features { grid-template-columns: 1fr; }
+  .hero-search { padding: 18px; }
+  .section { padding: 56px 0; }
   .hero-title { font-size: 28px; }
   .hero-desc { -webkit-line-clamp: 3; }
 }
-.contact-section{padding:70px 0;background:var(--cream)}
+.contact-section{padding:78px 0;background:var(--cream)}
 .contact-lead{font-size:14px;color:var(--muted);margin:12px 0 28px}
 .contact-form{max-width:600px}
 .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 @media (max-width:560px){.cf-row{grid-template-columns:1fr}}
-.contact-form input,.contact-form textarea{width:100%;padding:11px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:13.5px;font-family:inherit;background:var(--white);color:var(--ink);resize:vertical}
+.contact-form input,.contact-form textarea{width:100%;padding:13px 14px;border:1px solid rgba(0,0,0,.1);border-radius:var(--radius-sm);font-size:13.5px;font-family:inherit;background:var(--white);color:var(--ink);resize:vertical;transition:border-color .2s,box-shadow .2s}
+.contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 .contact-form textarea{margin-bottom:14px}
 .lead-error{font-size:11.5px;color:#b83232;margin:-8px 0 14px}
 .alert-success{background:#2e7d4f;color:#fff;padding:14px 0;font-size:13.5px;text-align:center}
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:stretch}
 @media (max-width:820px){.contact-grid{grid-template-columns:1fr}}
-.contact-col-map{min-height:360px;border-radius:6px;overflow:hidden}
+.contact-col-map{min-height:360px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-soft)}
 .contact-col-map iframe{width:100%;height:100%;min-height:360px;display:block}
 </style>
 
-<div class="features">
-  <div class="feature"><h3>Encuentra el lugar ideal</h3><p>Gran variedad de inmuebles en Colima y sus alrededores para cada necesidad.</p></div>
-  <div class="feature"><h3>Agentes con experiencia</h3><p>Especialistas listos para orientarte en cada paso del proceso.</p></div>
-  <div class="feature"><h3>Compra y renta</h3><p>Catalogo amplio de propiedades en venta y renta a tu medida.</p></div>
-  <div class="feature"><h3>Cuida tu inversion</h3><p>Manzanillo crece constantemente. Invertir aqui es siempre un acierto.</p></div>
-</div>
+<section class="section" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        </div>
+        <h3>Encuentra el lugar ideal</h3>
+        <p>Gran variedad de inmuebles en Colima y sus alrededores para cada necesidad.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 15.3c2.6.3 4.5 1.9 4.5 4.2"/></svg>
+        </div>
+        <h3>Agentes con experiencia</h3>
+        <p>Especialistas listos para orientarte en cada paso del proceso.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13M17 8l-3-3M17 8l-3 3"/><path d="M20 16H7M7 16l3-3M7 16l3 3"/></svg>
+        </div>
+        <h3>Compra y renta</h3>
+        <p>Catalogo amplio de propiedades en venta y renta a tu medida.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Cuida tu inversion</h3>
+        <p>Manzanillo crece constantemente. Invertir aqui es siempre un acierto.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="nuevas">
   <div class="wrap">
@@ -283,10 +325,11 @@ ul { list-style: none; }
       <div>
         <div class="section-eyebrow">Publicaciones recientes</div>
         <h2 class="section-title">Nuevas <em>propiedades</em></h2>
+        <p class="section-desc">Las incorporaciones mas recientes a nuestro catalogo, listas para visitar.</p>
       </div>
       <div class="slider-nav">
-        <button class="slider-btn" id="sl-prev">&#8592;</button>
-        <button class="slider-btn" id="sl-next">&#8594;</button>
+        <button class="slider-btn" id="sl-prev" aria-label="Anterior" type="button">&#8592;</button>
+        <button class="slider-btn" id="sl-next" aria-label="Siguiente" type="button">&#8594;</button>
       </div>
     </div>
     <div class="slider-outer">
@@ -305,6 +348,9 @@ ul { list-style: none; }
                 @else Venta y renta
                 @endif
               </span>
+              @if ($p->municipio)
+                <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
+              @endif
             </div>
             <div class="prop-body">
               <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
@@ -312,7 +358,7 @@ ul { list-style: none; }
               <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
               <div class="prop-meta">
                 @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-                @if ($p->banios)<span>{{ $p->banios }} banos</span>@endif
+                @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
                 @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
               </div>
             </div>
@@ -327,8 +373,9 @@ ul { list-style: none; }
   <div class="wrap" style="margin-bottom:40px;">
     <div class="section-eyebrow">Seleccion especial</div>
     <h2 class="section-title">Propiedades <em>recomendadas</em></h2>
+    <p class="section-desc">Una curaduria de las mejores opciones disponibles ahora mismo en Manzanillo.</p>
   </div>
-  <div class="recoms">
+  <div class="wrap recoms">
     @foreach ($recomendadas as $p)
       <div class="prop-card">
         <div class="prop-img" style="height:228px;">
@@ -343,6 +390,9 @@ ul { list-style: none; }
             @else Venta y renta
             @endif
           </span>
+          @if ($p->municipio)
+            <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
+          @endif
         </div>
         <div class="prop-body">
           <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
@@ -350,7 +400,7 @@ ul { list-style: none; }
           <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
           <div class="prop-meta">
             @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-            @if ($p->banios)<span>{{ $p->banios }} banos</span>@endif
+            @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
             @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
           </div>
         </div>
@@ -389,6 +439,16 @@ ul { list-style: none; }
 
 @include("partials.nav-script")
 
+<script>
+(function() {
+  var loader = document.getElementById("loader");
+  if (!loader) return;
+  window.addEventListener("load", function() {
+    loader.classList.add("gone");
+  });
+  setTimeout(function() { loader.classList.add("gone"); }, 1500);
+})();
+
 (function() {
   var slides = document.querySelectorAll(".hero-slide");
   var texts = document.querySelectorAll(".hero-text");
@@ -426,6 +486,8 @@ ul { list-style: none; }
   var btnN = document.getElementById("sl-next");
   if (!track) return;
   var pos = 0;
+  var gap = 24;
+
   function visCount() {
     if (window.innerWidth < 540) return 1;
     if (window.innerWidth < 860) return 2;
@@ -434,12 +496,26 @@ ul { list-style: none; }
   function maxPos() {
     return Math.max(0, track.children.length - visCount());
   }
+  function cardStep() {
+    var count = visCount();
+    var outerWidth = track.parentElement.offsetWidth;
+    var cardWidth = (outerWidth - gap * (count - 1)) / count;
+    return cardWidth + gap;
+  }
+  function updateButtons() {
+    if (!btnP || !btnN) return;
+    btnP.disabled = pos <= 0;
+    btnN.disabled = pos >= maxPos();
+  }
   function move(dir) {
     pos = Math.max(0, Math.min(pos + dir, maxPos()));
-    track.style.transform = "translateX(-" + (pos * (track.offsetWidth / visCount() + 8)) + "px)";
+    track.style.transform = "translateX(-" + (pos * cardStep()) + "px)";
+    updateButtons();
   }
-  btnP.addEventListener("click", function() { move(-1); });
-  btnN.addEventListener("click", function() { move(1); });
+  if (btnP) btnP.addEventListener("click", function() { move(-1); });
+  if (btnN) btnN.addEventListener("click", function() { move(1); });
+  window.addEventListener("resize", function() { move(0); });
+  updateButtons();
 })();
 </script>
 

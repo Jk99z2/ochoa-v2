@@ -112,7 +112,7 @@
                 <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
                 <div class="prop-meta">
                   @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-                  @if ($p->banios)<span>{{ $p->banios }} banos</span>@endif
+                  @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
                   @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
                 </div>
               </div>
