@@ -38,6 +38,12 @@ class PropiedadForm
                             ->unique(ignoreRecord: true)
                             ->columnSpanFull(),
 
+                        TextInput::make("clave")
+                            ->label("Clave")
+                            ->helperText("Se genera automáticamente al guardar, según el municipio.")
+                            ->disabled()
+                            ->dehydrated(false),
+
                         Select::make("agente_id")
                             ->label("Agente")
                             ->relationship("agente", "nombre")
@@ -171,11 +177,16 @@ class PropiedadForm
                             ->label("Colonia")
                             ->maxLength(120),
 
-                        TextInput::make("ciudad")
-                            ->label("Ciudad")
-                            ->default("Manzanillo")
-                            ->required()
-                            ->maxLength(120),
+                        Select::make("municipio_id")
+                            ->label("Municipio")
+                            ->relationship(
+                                name: "municipio",
+                                titleAttribute: "nombre",
+                                modifyQueryUsing: fn ($query) => $query->orderBy("orden"),
+                            )
+                            ->searchable()
+                            ->preload()
+                            ->required(),
 
                         TextInput::make("estado_mx")
                             ->label("Estado")

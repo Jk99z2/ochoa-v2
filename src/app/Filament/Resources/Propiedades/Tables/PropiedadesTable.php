@@ -22,11 +22,23 @@ class PropiedadesTable
     {
         return $table
             ->columns([
+                TextColumn::make("clave")
+                    ->label("Clave")
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make("titulo")
                     ->label("Título")
                     ->searchable()
                     ->sortable()
                     ->limit(40),
+
+                TextColumn::make("municipio.nombre")
+                    ->label("Municipio")
+                    ->badge()
+                    ->color("gray")
+                    ->searchable()
+                    ->sortable(),
 
                 TextColumn::make("agente.nombre")
                     ->label("Agente")
@@ -67,11 +79,6 @@ class PropiedadesTable
                 IconColumn::make("destacada")
                     ->label("Destacada")
                     ->boolean(),
-
-                TextColumn::make("ciudad")
-                    ->label("Ciudad")
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make("created_at")
                     ->label("Creado")

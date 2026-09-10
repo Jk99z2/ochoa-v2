@@ -43,7 +43,7 @@
     <div class="wrap">
       @foreach ($destacadas as $i => $p)
         <div class="hero-text @if($i === 0) active @endif" data-idx="{{ $i }}">
-          <div class="hero-tag">{{ $p->ciudad }}, {{ $p->estado_mx }}</div>
+          <div class="hero-tag">{{ $p->municipio?->nombre }}, {{ $p->estado_mx }}</div>
           <h1 class="hero-title">{{ $p->titulo }}</h1>
           <p class="hero-desc">{{ $p->descripcion }}</p>
           <span class="hero-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
@@ -62,7 +62,7 @@
   </div>
 
   <div class="hero-loc" id="hero-loc">
-    <span id="hero-loc-text">{{ $destacadas->first()->ciudad ?? "Manzanillo" }}, Colima</span>
+    <span id="hero-loc-text">{{ $destacadas->first()->municipio?->nombre ?? "Manzanillo" }}, Colima</span>
   </div>
 </section>
 <section class="hero-search-wrap">
@@ -86,8 +86,13 @@
         </select>
       </div>
       <div class="hs-field">
-        <label>Ciudad</label>
-        <input type="text" name="ciudad" placeholder="Manzanillo">
+        <label>Municipio</label>
+        <select name="municipio">
+          <option value="">Todos</option>
+          @foreach ($navMunicipios as $navMunicipio)
+            <option value="{{ $navMunicipio->clave }}">{{ $navMunicipio->nombre }}</option>
+          @endforeach
+        </select>
       </div>
       <div class="hs-field">
         <label>Precio maximo</label>
