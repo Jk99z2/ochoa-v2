@@ -33,6 +33,13 @@ class PropiedadesTable
                     ->sortable()
                     ->limit(40),
 
+                TextColumn::make("municipio.nombre")
+                    ->label("Municipio")
+                    ->badge()
+                    ->color("gray")
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make("agente.nombre")
                     ->label("Agente")
                     ->searchable()
@@ -72,12 +79,6 @@ class PropiedadesTable
                 IconColumn::make("destacada")
                     ->label("Destacada")
                     ->boolean(),
-
-                TextColumn::make("municipio.nombre")
-                    ->label("Municipio")
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make("created_at")
                     ->label("Creado")

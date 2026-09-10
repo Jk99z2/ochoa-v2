@@ -56,12 +56,21 @@
   <div class="wrap detail-grid">
     <div class="detail-main">
       <div class="detail-header">
-        @if ($propiedad->destacada)
-          <span class="prop-badge">Destacada</span>
+        @if ($propiedad->destacada || $propiedad->municipio)
+          <div class="detail-top-badges">
+            @if ($propiedad->destacada)
+              <span class="prop-badge">Destacada</span>
+            @endif
+            @if ($propiedad->municipio)
+              <span class="prop-municipio">{{ $propiedad->municipio->nombre }}</span>
+            @endif
+          </div>
         @endif
         <h1 class="detail-title">{{ $propiedad->titulo }}</h1>
         @if ($propiedad->clave)
-          <p class="detail-ref">Ref: {{ $propiedad->clave }}</p>
+          <div class="detail-meta-row">
+            <p class="detail-ref">Ref: {{ $propiedad->clave }}</p>
+          </div>
         @endif
         <p class="detail-loc">{{ $propiedad->colonia }}@if($propiedad->colonia && $propiedad->municipio), @endif{{ $propiedad->municipio?->nombre }}, {{ $propiedad->estado_mx }}</p>
         <span class="detail-price">
@@ -198,8 +207,12 @@ a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-
 .detail-body{padding:56px 0 80px}
 .detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:48px}
 @media (max-width:900px){.detail-grid{grid-template-columns:1fr}}
-.prop-badge{display:inline-block;background:var(--gold);color:#fff;font-size:9.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;margin-bottom:12px}
+.detail-top-badges{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.prop-badge{display:inline-block;background:var(--gold);color:#fff;font-size:9.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:4px 10px}
 .detail-title{font-family:"Inter",sans-serif;font-size:clamp(28px,3.5vw,42px);font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:8px}
+.detail-meta-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.detail-ref{font-size:12.5px;color:var(--muted)}
+.prop-municipio{font-size:10.5px;font-weight:600;letter-spacing:.3px;color:var(--gold);background:rgba(184,135,42,.1);border:1px solid var(--border);border-radius:20px;padding:3px 10px;white-space:nowrap}
 .detail-loc{font-size:14px;color:var(--muted);margin-bottom:16px}
 .detail-price{font-family:"Inter",sans-serif;font-size:32px;font-weight:600;color:var(--gold)}
 .detail-price-period{font-size:15px;font-weight:400;color:var(--muted)}

@@ -179,8 +179,11 @@ class PropiedadForm
 
                         Select::make("municipio_id")
                             ->label("Municipio")
-                            ->relationship("municipio", "nombre")
-                            ->orderBy("orden")
+                            ->relationship(
+                                name: "municipio",
+                                titleAttribute: "nombre",
+                                modifyQueryUsing: fn ($query) => $query->orderBy("orden"),
+                            )
                             ->searchable()
                             ->preload()
                             ->required(),

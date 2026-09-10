@@ -102,10 +102,13 @@
                   @else Venta y renta
                   @endif
                 </span>
+                @if ($p->municipio)
+                  <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
+                @endif
               </div>
               <div class="prop-body">
                 <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
-                <p class="prop-cat">{{ $p->tipo?->nombre }} - {{ $p->municipio?->nombre }}</p>
+                <p class="prop-cat">{{ $p->tipo?->nombre }}</p>
                 <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
                 <div class="prop-meta">
                   @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
@@ -182,6 +185,7 @@ a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-
 .prop-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .prop-card:hover .prop-img img{transform:scale(1.06)}
 .prop-badge{position:absolute;top:12px;left:12px;background:var(--gold);color:#fff;font-size:9.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:4px 10px}
+.prop-municipio{position:absolute;top:12px;right:12px;background:#fff;color:var(--ink);font-size:9.5px;font-weight:600;letter-spacing:.3px;border-radius:20px;padding:4px 10px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .prop-body{padding:16px}
 .prop-body h3{font-family:"Inter",sans-serif;font-size:17px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prop-body h3 a:hover{color:var(--gold)}
