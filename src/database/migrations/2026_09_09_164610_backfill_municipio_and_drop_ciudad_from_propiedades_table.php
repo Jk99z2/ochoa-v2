@@ -43,14 +43,29 @@ return new class extends Migration
                 ]);
             });
 
+        // Guarded so this migration can be safely re-run after a partial
+        // failure - MySQL won't let you drop an index that's already gone.
+        if (Schema::hasIndex('propiedades', 'propiedades_ciudad_colonia_index')) {
+            Schema::table('propiedades', function (Blueprint $table) {
+                $table->dropIndex('propiedades_ciudad_colonia_index');
+            });
+        }
+
+        // MySQL refuses to MODIFY a column that's part of a foreign key
+        // constraint (error 1832), so the FK has to come off before we
+        // change municipio_id's nullability and go back on afterward.
         Schema::table('propiedades', function (Blueprint $table) {
-            $table->dropIndex('propiedades_ciudad_colonia_index');
+            $table->dropForeign(['municipio_id']);
         });
 
         Schema::table('propiedades', function (Blueprint $table) {
             $table->foreignId('municipio_id')->nullable(false)->change();
             $table->string('clave', 20)->nullable(false)->change();
             $table->dropColumn('ciudad');
+        });
+
+        Schema::table('propiedades', function (Blueprint $table) {
+            $table->foreign('municipio_id')->references('id')->on('municipios')->restrictOnDelete();
         });
 
         Schema::table('propiedades', function (Blueprint $table) {
@@ -65,9 +80,17 @@ return new class extends Migration
         });
 
         Schema::table('propiedades', function (Blueprint $table) {
+            $table->dropForeign(['municipio_id']);
+        });
+
+        Schema::table('propiedades', function (Blueprint $table) {
             $table->string('ciudad', 120)->nullable()->default('Manzanillo');
             $table->foreignId('municipio_id')->nullable()->change();
             $table->string('clave', 20)->nullable()->change();
+        });
+
+        Schema::table('propiedades', function (Blueprint $table) {
+            $table->foreign('municipio_id')->references('id')->on('municipios')->restrictOnDelete();
         });
 
         DB::table('propiedades')->orderBy('id')->select('id', 'municipio_id')->get()->each(function ($propiedad) {
