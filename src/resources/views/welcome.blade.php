@@ -239,6 +239,10 @@ ul { list-style: none; }
 .slider-track .prop-card { flex: 0 0 calc(33.333% - 16px); }
 @media (max-width:860px) { .slider-track .prop-card { flex: 0 0 calc(50% - 12px); } }
 @media (max-width:540px) { .slider-track .prop-card { flex: 0 0 100%; } }
+.slider-dots { display: flex; justify-content: center; gap: 8px; margin-top: 32px; }
+.slider-dots:empty { display: none; }
+.slider-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(17,16,16,.15); border: none; cursor: pointer; padding: 0; transition: background .3s, transform .3s; }
+.slider-dot.active { background: var(--gold); transform: scale(1.5); }
 .recoms { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
 @media (max-width:860px) { .recoms { grid-template-columns: repeat(2,1fr); } }
 @media (max-width:480px) { .recoms { grid-template-columns: 1fr; } }
@@ -366,6 +370,7 @@ ul { list-style: none; }
         @endforeach
       </div>
     </div>
+    <div class="slider-dots" id="slider-dots"></div>
   </div>
 </section>
 
@@ -484,14 +489,18 @@ ul { list-style: none; }
   var track = document.getElementById("slider-track");
   var btnP = document.getElementById("sl-prev");
   var btnN = document.getElementById("sl-next");
+  var dotsWrap = document.getElementById("slider-dots");
   if (!track) return;
-  var pos = 0;
+  var page = 0;
   var gap = 24;
 
   function visCount() {
     if (window.innerWidth < 540) return 1;
     if (window.innerWidth < 860) return 2;
     return 3;
+  }
+  function pageCount() {
+    return Math.max(1, Math.ceil(track.children.length / visCount()));
   }
   function maxPos() {
     return Math.max(0, track.children.length - visCount());
@@ -502,20 +511,57 @@ ul { list-style: none; }
     var cardWidth = (outerWidth - gap * (count - 1)) / count;
     return cardWidth + gap;
   }
+  function posForPage(p) {
+    return Math.max(0, Math.min(p * visCount(), maxPos()));
+  }
   function updateButtons() {
     if (!btnP || !btnN) return;
-    btnP.disabled = pos <= 0;
-    btnN.disabled = pos >= maxPos();
+    btnP.disabled = page <= 0;
+    btnN.disabled = page >= pageCount() - 1;
   }
-  function move(dir) {
-    pos = Math.max(0, Math.min(pos + dir, maxPos()));
-    track.style.transform = "translateX(-" + (pos * cardStep()) + "px)";
+  function updateDots() {
+    if (!dotsWrap) return;
+    dotsWrap.querySelectorAll(".slider-dot").forEach(function(dot, i) {
+      dot.classList.toggle("active", i === page);
+    });
+  }
+  function buildDots() {
+    if (!dotsWrap) return;
+    var pages = pageCount();
+    if (pages <= 1) {
+      dotsWrap.innerHTML = "";
+      return;
+    }
+    var html = "";
+    for (var i = 0; i < pages; i++) {
+      html += '<button class="slider-dot" data-page="' + i + '" aria-label="Pagina ' + (i + 1) + '" type="button"></button>';
+    }
+    dotsWrap.innerHTML = html;
+    dotsWrap.querySelectorAll(".slider-dot").forEach(function(dot) {
+      dot.addEventListener("click", function() {
+        goTo(parseInt(this.dataset.page, 10));
+      });
+    });
+  }
+  function render() {
+    track.style.transform = "translateX(-" + (posForPage(page) * cardStep()) + "px)";
     updateButtons();
+    updateDots();
   }
+  function goTo(p) {
+    page = Math.max(0, Math.min(p, pageCount() - 1));
+    render();
+  }
+  function move(dir) { goTo(page + dir); }
+
   if (btnP) btnP.addEventListener("click", function() { move(-1); });
   if (btnN) btnN.addEventListener("click", function() { move(1); });
-  window.addEventListener("resize", function() { move(0); });
-  updateButtons();
+  window.addEventListener("resize", function() {
+    buildDots();
+    goTo(page);
+  });
+  buildDots();
+  render();
 })();
 </script>
 

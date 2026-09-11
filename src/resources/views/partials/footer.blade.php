@@ -22,7 +22,7 @@
           <li><span class="fi icon-phone"></span><a href="tel:{{ preg_replace("/[^0-9+]/", "", $siteConfig->telefono_oficina) }}">{{ $siteConfig->telefono_oficina }} Oficina</a></li>
           <li><span class="fi icon-phone"></span><a href="tel:{{ preg_replace("/[^0-9+]/", "", $siteConfig->telefono_celular) }}">{{ $siteConfig->telefono_celular }} Celular</a></li>
           <li><span class="fi icon-envelope"></span><a href="mailto:{{ $siteConfig->email_contacto }}">{{ $siteConfig->email_contacto }}</a></li>
-          <li><span class="fi"></span><span>{{ $siteConfig->horario }}</span></li>
+          <li><span class="fi icon-calendar"></span><span>{{ $siteConfig->horario }}</span></li>
         </ul>
       </div>
     </div>
