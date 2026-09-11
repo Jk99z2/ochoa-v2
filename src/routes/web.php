@@ -35,7 +35,7 @@ Route::get("/", function () {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->latest()
-        ->take(6)
+        ->take(12)
         ->get();
 
     $recomendadas = Propiedad::where("publicada", true)
