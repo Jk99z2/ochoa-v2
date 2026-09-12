@@ -195,43 +195,54 @@
   </div>
 </section>
 
-<section class="section section-alt">
-  <div class="wrap" style="margin-bottom:40px;">
-    <div class="section-eyebrow">Seleccion especial</div>
-    <h2 class="section-title">Propiedades <em>recomendadas</em></h2>
-    <p class="section-desc">Una curaduria de las mejores opciones disponibles ahora mismo en Manzanillo.</p>
-  </div>
-  <div class="wrap recoms">
-    @foreach ($recomendadas as $p)
-      <div class="prop-card">
-        <div class="prop-img" style="height:228px;">
-          <a href="{{ route("propiedades.show", $p->slug) }}">
-            @if ($p->imagenes->isNotEmpty())
-              <img src="{{ Storage::url($p->imagenes->first()->path) }}" alt="{{ $p->titulo }}" loading="lazy">
-            @endif
-          </a>
-          <span class="prop-badge">
-            @if ($p->operacion === "venta") En venta
-            @elseif ($p->operacion === "renta") En renta
-            @else Venta y renta
-            @endif
-          </span>
-          @if ($p->municipio)
-            <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
-          @endif
-        </div>
-        <div class="prop-body">
-          <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
-          <p class="prop-cat">{{ $p->tipo?->nombre }}</p>
-          <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
-          <div class="prop-meta">
-            @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-            @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
-            @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
-          </div>
-        </div>
+<section class="section section-alt" id="recomendadas">
+  <div class="wrap">
+    <div class="slider-head">
+      <div>
+        <div class="section-eyebrow">Seleccion especial</div>
+        <h2 class="section-title">Propiedades <em>recomendadas</em></h2>
+        <p class="section-desc">Una curaduria de las mejores opciones disponibles ahora mismo en Manzanillo.</p>
       </div>
-    @endforeach
+      <div class="slider-nav">
+        <button class="slider-btn" id="rec-prev" aria-label="Anterior" type="button">&#8592;</button>
+        <button class="slider-btn" id="rec-next" aria-label="Siguiente" type="button">&#8594;</button>
+      </div>
+    </div>
+    <div class="slider-outer">
+      <div class="slider-track" id="rec-track">
+        @foreach ($recomendadas as $p)
+          <div class="prop-card">
+            <div class="prop-img">
+              <a href="{{ route("propiedades.show", $p->slug) }}">
+                @if ($p->imagenes->isNotEmpty())
+                  <img src="{{ Storage::url($p->imagenes->first()->path) }}" alt="{{ $p->titulo }}" loading="lazy">
+                @endif
+              </a>
+              <span class="prop-badge">
+                @if ($p->operacion === "venta") En venta
+                @elseif ($p->operacion === "renta") En renta
+                @else Venta y renta
+                @endif
+              </span>
+              @if ($p->municipio)
+                <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
+              @endif
+            </div>
+            <div class="prop-body">
+              <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
+              <p class="prop-cat">{{ $p->tipo?->nombre }}</p>
+              <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
+              <div class="prop-meta">
+                @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
+                @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
+                @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
+              </div>
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+    <div class="slider-dots" id="rec-dots"></div>
   </div>
 </section>
 <section class="contact-section" id="contacto-form">
@@ -306,11 +317,11 @@
   startTimer();
 })();
 
-(function() {
-  var track = document.getElementById("slider-track");
-  var btnP = document.getElementById("sl-prev");
-  var btnN = document.getElementById("sl-next");
-  var dotsWrap = document.getElementById("slider-dots");
+function initSlider(trackId, prevId, nextId, dotsId) {
+  var track = document.getElementById(trackId);
+  var btnP = document.getElementById(prevId);
+  var btnN = document.getElementById(nextId);
+  var dotsWrap = document.getElementById(dotsId);
   if (!track) return;
   var page = 0;
   var gap = 24;
@@ -383,7 +394,10 @@
   });
   buildDots();
   render();
-})();
+}
+
+initSlider("slider-track", "sl-prev", "sl-next", "slider-dots");
+initSlider("rec-track", "rec-prev", "rec-next", "rec-dots");
 </script>
 
 </body>
