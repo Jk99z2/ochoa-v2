@@ -15,6 +15,7 @@
   <link rel="icon" href="{{ $siteConfig->favicon_path ? Storage::url($siteConfig->favicon_path) : '/logos/logochoa.png' }}" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/site.css">
+  <link rel="stylesheet" href="/css/listing.css">
 </head>
 <body>
 
@@ -127,92 +128,6 @@
     </div>
   </div>
 </section>
-
-<style>
-:root { --ink:#111010; --gold:#b8872a; --gold-lt:#d4a84b; --cream:#f5f1ea; --warm:#ede8de; --muted:#7a7468; --white:#ffffff; --border:rgba(184,135,42,.18); --ease:cubic-bezier(.4,0,.2,1); }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:"Inter",sans-serif;background:var(--white);color:var(--ink);overflow-x:hidden}
-a{text-decoration:none;color:inherit} img{display:block;max-width:100%} ul{list-style:none}
-.topbar{background:var(--ink);height:36px;display:flex;align-items:center;font-size:11.5px;color:rgba(255,255,255,.45)}
-.wrap{max-width:1260px;margin:0 auto;padding:0 24px;width:100%}
-.topbar .wrap{display:flex;justify-content:space-between;align-items:center}
-.topbar a{color:rgba(255,255,255,.4)} .topbar a:hover{color:var(--gold-lt)}
-.topbar .phones{display:flex;gap:20px} .topbar .phones span{display:flex;align-items:center;gap:5px}
-@media (max-width:600px){.topbar .phones span:last-child{display:none}}
-.nav{position:sticky;top:0;z-index:900;height:64px;background:rgba(17,16,16,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.nav .wrap{height:100%;display:flex;justify-content:space-between;align-items:center;position:relative}
-.nav-brand{display:flex;align-items:center;gap:10px;flex-shrink:0} .nav-brand img{height:32px;width:auto}
-.nav-brand-text{font-family:"Inter",sans-serif;font-size:17px;font-weight:600;color:#fff;line-height:1.2}
-.nav-brand-text em{color:var(--gold);font-style:normal}
-.nav-menu{display:flex;align-items:center;gap:2px;padding-top:18px}
-.nav-menu li a{display:flex;align-items:center;height:40px;padding:0 12px;font-size:12.5px;color:rgba(255,255,255,.6);border-radius:3px;transition:color .2s,background .2s;white-space:nowrap}
-.nav-menu li a:hover{color:#fff;background:rgba(255,255,255,.07)} .nav-menu li a.active{color:var(--gold-lt)}
-.nav-drop{position:relative}
-.nav-drop-panel{display:none;position:absolute;top:100%;left:0;background:#1a1918;border:1px solid var(--border);border-radius:4px;min-width:190px;padding:6px 0;box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:10}
-.nav-drop:hover .nav-drop-panel{display:block}
-.nav-drop-panel a{display:block;padding:8px 18px;font-size:12.5px;color:rgba(255,255,255,.6)!important;border-radius:0!important;background:none!important}
-.nav-drop-panel a:hover{background:rgba(184,135,42,.12)!important;color:#fff!important}
-.nav-burger{display:none;background:none;border:1px solid rgba(255,255,255,.2);border-radius:3px;padding:6px 10px;cursor:pointer;color:#fff;font-size:14px}
-@media (max-width:900px){
-  .nav-burger{display:block}
-  .nav-menu{display:none;flex-direction:column;align-items:flex-start;position:absolute;top:64px;left:0;right:0;background:#141312;border-top:1px solid var(--border);padding:10px 16px 20px}
-  .nav-menu.open{display:flex} .nav-menu li{width:100%} .nav-menu li a{padding:10px 8px;font-size:14px}
-  .nav-drop-panel{position:static;border:none;box-shadow:none;background:rgba(255,255,255,.04);padding:0 0 0 14px;display:block;min-width:auto}
-}
-.listing-hero{background:var(--cream);padding:48px 0 32px}
-.listing-title{font-family:"Inter",sans-serif;font-size:clamp(28px,3.5vw,42px);font-weight:700;margin-bottom:6px}
-.listing-count{font-size:13.5px;color:var(--muted)}
-.listing-body{padding:48px 0 80px}
-.listing-grid{display:grid;grid-template-columns:260px 1fr;gap:40px;align-items:start}
-@media (max-width:820px){.listing-grid{grid-template-columns:1fr}}
-.filters{background:var(--cream);border-radius:6px;padding:24px;position:sticky;top:88px}
-.filters-title{font-family:"Inter",sans-serif;font-size:18px;font-weight:600;margin-bottom:18px}
-.filter-group{margin-bottom:16px}
-.filter-group label{display:block;font-size:11.5px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
-.filter-group select,.filter-group input{width:100%;padding:9px 10px;border:1px solid rgba(0,0,0,.12);border-radius:4px;font-size:13.5px;font-family:inherit;background:var(--white);color:var(--ink)}
-.filter-submit{width:100%;background:var(--gold);color:#fff;border:none;padding:11px;border-radius:4px;font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:background .2s}
-.filter-submit:hover{background:var(--gold-lt)}
-.filter-clear{display:block;text-align:center;margin-top:10px;font-size:12.5px;color:var(--muted);text-decoration:underline}
-.no-results{text-align:center;padding:60px 20px;color:var(--muted)}
-.no-results p{margin-bottom:16px}
-.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media (max-width:1000px){.results-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:600px){.results-grid{grid-template-columns:1fr}}
-.prop-card{background:var(--white);border:1px solid rgba(0,0,0,.07);overflow:hidden;transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
-.prop-card:hover{box-shadow:0 14px 40px rgba(0,0,0,.1);transform:translateY(-4px)}
-.prop-img{position:relative;overflow:hidden;height:190px;background:var(--warm)}
-.prop-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
-.prop-card:hover .prop-img img{transform:scale(1.06)}
-.prop-badge{position:absolute;top:12px;left:12px;background:var(--gold);color:#fff;font-size:9.5px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:4px 10px}
-.prop-municipio{position:absolute;top:12px;right:12px;background:#fff;color:var(--ink);font-size:9.5px;font-weight:600;letter-spacing:.3px;border-radius:20px;padding:4px 10px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.prop-body{padding:16px}
-.prop-body h3{font-family:"Inter",sans-serif;font-size:17px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prop-body h3 a:hover{color:var(--gold)}
-.prop-cat{font-size:11.5px;color:var(--muted);margin-bottom:10px}
-.prop-price{font-family:"Inter",sans-serif;font-size:19px;font-weight:600;color:var(--gold)}
-.prop-meta{display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,0,0,.06);font-size:11px;color:var(--muted)}
-.listing-pagination{margin-top:36px;display:flex;justify-content:center}
-.listing-pagination nav{font-size:13px}
-.footer{background:var(--ink);color:rgba(255,255,255,.45);padding:68px 0 0;margin-top:20px}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1.7fr;gap:56px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.07)}
-@media (max-width:820px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
-@media (max-width:480px){.footer-grid{grid-template-columns:1fr}}
-.footer h4{font-family:"Inter",sans-serif;font-size:18px;font-weight:600;color:#fff;margin-bottom:18px}
-.footer p{font-size:13px;line-height:1.75}
-.footer-links li{margin-bottom:9px}
-.footer-links a{font-size:13px;color:rgba(255,255,255,.4)} .footer-links a:hover{color:var(--gold-lt)}
-.footer-contact li{display:flex;gap:10px;font-size:13px;line-height:1.65;margin-bottom:11px}
-.footer-contact .fi{color:var(--gold);flex-shrink:0;margin-top:2px}
-.footer-social{display:flex;gap:10px;margin-top:20px}
-.footer-social a{width:34px;height:34px;border:1px solid rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.4)}
-.footer-bottom{padding:18px 0;text-align:center;font-size:11.5px;color:rgba(255,255,255,.18)}
-@media (max-width: 820px) {
-  .filters { position: static; margin-bottom: 24px; }
-  .listing-hero { padding: 32px 0 24px; }
-  .filter-group select, .filter-group input { font-size: 16px; }
-}
-</style>
 
 @include("partials.footer")
 
