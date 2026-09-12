@@ -52,4 +52,19 @@ class LoginLogTest extends TestCase
         $response->assertSee("1.1.1.1");
         $response->assertSee("2.2.2.2");
     }
+
+    public function test_profile_page_shows_only_the_current_users_login_history(): void
+    {
+        $user = User::factory()->create(["is_admin" => false]);
+        $otherUser = User::factory()->create(["is_admin" => false]);
+
+        LoginLog::create(["user_id" => $user->id, "ip_address" => "1.1.1.1"]);
+        LoginLog::create(["user_id" => $otherUser->id, "ip_address" => "2.2.2.2"]);
+
+        $response = $this->actingAs($user)->get("/admin/profile");
+
+        $response->assertOk();
+        $response->assertSee("1.1.1.1");
+        $response->assertDontSee("2.2.2.2");
+    }
 }
