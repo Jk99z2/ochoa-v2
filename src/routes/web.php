@@ -44,7 +44,7 @@ Route::get("/", function () {
             $query->orderByDesc("principal")->orderBy("orden");
         }])
         ->latest()
-        ->take(4)
+        ->take(12)
         ->get();
 
     return view("welcome", compact("destacadas", "nuevas", "recomendadas", "navTipos", "navMunicipios"));

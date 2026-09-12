@@ -78,11 +78,6 @@
 .slider-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(17,16,16,.15); border: none; cursor: pointer; padding: 0; transition: background .3s, transform .3s; }
 .slider-dot.active { background: var(--gold); transform: scale(1.5); }
 
-/* Propiedades recomendadas grid */
-.recoms { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
-@media (max-width:860px) { .recoms { grid-template-columns: repeat(2,1fr); } }
-@media (max-width:480px) { .recoms { grid-template-columns: 1fr; } }
-
 /* Contact section */
 .contact-section { padding: 78px 0; background: var(--cream); }
 .contact-lead { font-size: 14px; color: var(--muted); margin: 12px 0 28px; }
