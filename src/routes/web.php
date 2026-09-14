@@ -1,11 +1,19 @@
 <?php
 
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\SitemapController;
 use App\Models\Municipio;
 use App\Models\Propiedad;
 use App\Models\Tipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::get("/sitemap.xml", [SitemapController::class, "index"])->name("sitemap");
+
+Route::get("/robots.txt", function () {
+    return response("User-agent: *\nDisallow:\n\nSitemap: " . url("/sitemap.xml") . "\n")
+        ->header("Content-Type", "text/plain");
+});
 
 Route::get("/", function () {
     $navTipos = Tipo::orderBy("orden")->get();
