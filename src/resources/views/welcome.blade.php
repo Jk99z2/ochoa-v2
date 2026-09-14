@@ -1,30 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ $siteConfig->nombre_sitio }} - Manzanillo, Colima</title>
+@extends("layouts.public")
+
+@section("title", $siteConfig->nombre_sitio . " - Manzanillo, Colima")
+
+@section("meta")
   <meta name="description" content="Encuentra casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Ochoa Real Estate Services, tu inmobiliaria de confianza.">
   <meta property="og:title" content="Ochoa Real Estate Services - Manzanillo, Colima">
   <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
   <meta property="og:type" content="website">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
-  <link rel="stylesheet" href="/css/animate.css">
-  <link rel="stylesheet" href="/css/owl.carousel.min.css">
-  <link rel="stylesheet" href="/css/owl.theme.default.min.css">
-  <link rel="stylesheet" href="/css/magnific-popup.css">
-  <link rel="stylesheet" href="/css/aos.css">
-  <link rel="stylesheet" href="/css/ionicons.min.css">
-  <link rel="stylesheet" href="/css/flaticon.css">
-  <link rel="stylesheet" href="/css/icomoon.css">
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="icon" href="{{ $siteConfig->favicon_path ? Storage::url($siteConfig->favicon_path) : '/logos/logochoa.png' }}" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/site.css">
+@endsection
+
+@push("styles")
   <link rel="stylesheet" href="/css/home.css">
-</head>
-<body>
+@endpush
+
+@section("content")
 <div id="loader"><div class="loader-ring"></div></div>
 
 @if (session("success"))
@@ -160,34 +149,7 @@
     <div class="slider-outer">
       <div class="slider-track" id="slider-track">
         @foreach ($nuevas as $p)
-          <div class="prop-card">
-            <div class="prop-img">
-              <a href="{{ route("propiedades.show", $p->slug) }}">
-                @if ($p->imagenes->isNotEmpty())
-                  <img src="{{ Storage::url($p->imagenes->first()->path) }}" alt="{{ $p->titulo }}" loading="lazy">
-                @endif
-              </a>
-              <span class="prop-badge">
-                @if ($p->operacion === "venta") En venta
-                @elseif ($p->operacion === "renta") En renta
-                @else Venta y renta
-                @endif
-              </span>
-              @if ($p->municipio)
-                <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
-              @endif
-            </div>
-            <div class="prop-body">
-              <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
-              <p class="prop-cat">{{ $p->tipo?->nombre }}</p>
-              <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
-              <div class="prop-meta">
-                @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-                @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
-                @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
-              </div>
-            </div>
-          </div>
+          <x-prop-card :propiedad="$p" />
         @endforeach
       </div>
     </div>
@@ -211,34 +173,7 @@
     <div class="slider-outer">
       <div class="slider-track" id="rec-track">
         @foreach ($recomendadas as $p)
-          <div class="prop-card">
-            <div class="prop-img">
-              <a href="{{ route("propiedades.show", $p->slug) }}">
-                @if ($p->imagenes->isNotEmpty())
-                  <img src="{{ Storage::url($p->imagenes->first()->path) }}" alt="{{ $p->titulo }}" loading="lazy">
-                @endif
-              </a>
-              <span class="prop-badge">
-                @if ($p->operacion === "venta") En venta
-                @elseif ($p->operacion === "renta") En renta
-                @else Venta y renta
-                @endif
-              </span>
-              @if ($p->municipio)
-                <span class="prop-municipio">{{ $p->municipio->nombre }}</span>
-              @endif
-            </div>
-            <div class="prop-body">
-              <h3><a href="{{ route("propiedades.show", $p->slug) }}">{{ $p->titulo }}</a></h3>
-              <p class="prop-cat">{{ $p->tipo?->nombre }}</p>
-              <span class="prop-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
-              <div class="prop-meta">
-                @if ($p->m2_construccion)<span>{{ $p->m2_construccion }} m2</span>@endif
-                @if ($p->banios)<span>{{ $p->banios }} baños</span>@endif
-                @if ($p->recamaras)<span>{{ $p->recamaras }} rec</span>@endif
-              </div>
-            </div>
-          </div>
+          <x-prop-card :propiedad="$p" />
         @endforeach
       </div>
     </div>
@@ -399,6 +334,4 @@ function initSlider(trackId, prevId, nextId, dotsId) {
 initSlider("slider-track", "sl-prev", "sl-next", "slider-dots");
 initSlider("rec-track", "rec-prev", "rec-next", "rec-dots");
 </script>
-
-</body>
-</html>
+@endsection
