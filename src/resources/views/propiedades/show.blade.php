@@ -35,7 +35,7 @@
     @if ($propiedad->imagenes->count() > 1)
       <div class="gallery-thumbs">
         @foreach ($propiedad->imagenes as $img)
-          <img src="{{ Storage::url($img->path) }}" alt="{{ $img->alt ?? $propiedad->titulo }}" class="gallery-thumb" data-full="{{ Storage::url($img->path) }}">
+          <img src="{{ $img->thumb_url }}" alt="{{ $img->alt ?? $propiedad->titulo }}" class="gallery-thumb" data-full="{{ Storage::url($img->path) }}" loading="lazy">
         @endforeach
       </div>
     @endif

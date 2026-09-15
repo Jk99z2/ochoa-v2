@@ -4,7 +4,7 @@
   <div class="prop-img">
     <a href="{{ route("propiedades.show", $propiedad->slug) }}">
       @if ($propiedad->imagenes->isNotEmpty())
-        <img src="{{ Storage::url($propiedad->imagenes->first()->path) }}" alt="{{ $propiedad->titulo }}" loading="lazy">
+        <img src="{{ $propiedad->imagenes->first()->thumb_url }}" alt="{{ $propiedad->titulo }}" loading="lazy">
       @endif
     </a>
     <span class="prop-badge">
