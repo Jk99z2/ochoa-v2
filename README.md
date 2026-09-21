@@ -174,6 +174,30 @@ Never commit either file. `src/.env.example` documents the expected keys.
 - **`bootstrap/app.php` needs `$middleware->trustProxies(at: '*')`** inside `withMiddleware()` — without it, Laravel doesn't trust the `X-Forwarded-Proto` header from Nginx Proxy Manager and generates `http://` URLs even when served over HTTPS, causing mixed-content browser errors.
 - **File uploads (Filament `FileUpload` components) must explicitly set `->disk("public")`** — Laravel's default local disk root changed in recent versions and uploads can silently land in a non-web-accessible location otherwise.
 - **PHP-FPM/OPcache:** the Dockerfile sets `opcache.validate_timestamps=1` and `revalidate_freq=0` for dev (picks up file changes immediately). Confirm these are appropriate for your environment if debugging stale-code symptoms after a deploy — when in doubt, `docker compose restart app` forces a clean reload.
+## Lead email notifications
+
+When the public contact form creates a lead, an email (`App\Mail\NewLeadMail`) is sent **after the response** (via `defer()`, so no queue worker is needed) to the first available of:
+
+1. the agent the lead was addressed to (`agente_id`),
+2. the agent that owns the property,
+3. the office address in **Admin → Configuración → `email_contacto`**.
+
+Inactive agents are skipped. The email's Reply-To is the visitor's address, so the agent can just hit reply. If nobody can be notified, or sending fails, the lead is still saved and visible in the admin panel.
+
+Outgoing mail needs real SMTP settings in each environment's `src/.env` (the default `MAIL_MAILER=log` only writes to the log):
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=...
+MAIL_PORT=587
+MAIL_USERNAME=...
+MAIL_PASSWORD=...
+MAIL_FROM_ADDRESS=notificaciones@ochoarealestateservices.com
+MAIL_FROM_NAME="Ochoa Real Estate Services"
+```
+
+Leave staging on `MAIL_MAILER=log` — it holds a copy of production leads and agent emails, and you don't want it mailing real agents.
+
 - **`docker/nginx/default.conf` is gitignored and maintained independently per environment** — it is never committed, so a `git pull` on any server can never overwrite another environment's live config. Each machine (local dev, staging, prod) keeps its own local copy, created once from the tracked template `docker/nginx/default.conf.example` and then edited for that environment's `fastcgi_pass` value: `app:9000` locally, `ochoa2_staging_app:9000` on staging, `ochoa2_app:9000` on prod.
 - **If `docker compose up` fails with `error mounting .../docker/nginx/default.conf ... not a directory`**, Docker auto-created an empty directory where the file should be — this happens on a fresh clone or new server, since the real file is gitignored by design (see above) and doesn't exist until you create it. Fix: `sudo rm -rf docker/nginx/default.conf` (needs sudo since Docker creates it as root), then `cp docker/nginx/default.conf.example docker/nginx/default.conf` and set the correct `fastcgi_pass` value for this environment.
 

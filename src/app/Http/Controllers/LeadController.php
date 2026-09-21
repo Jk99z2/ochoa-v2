@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewLeadMail;
 use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LeadController extends Controller
 {
@@ -28,12 +30,12 @@ class LeadController extends Controller
             'nombre' => 'required|string|max:120',
             'email' => 'nullable|email|max:120',
             'telefono' => 'nullable|string|max:30',
-            'mensaje' => 'nullable|string',
+            'mensaje' => 'nullable|string|max:2000',
             'propiedad_id' => 'nullable|exists:propiedades,id',
             'agente_id' => 'nullable|exists:agentes,id',
         ]);
 
-        Lead::create([
+        $lead = Lead::create([
             'propiedad_id' => $validated['propiedad_id'] ?? null,
             'agente_id' => $validated['agente_id'] ?? null,
             'nombre' => $validated['nombre'],
@@ -44,7 +46,24 @@ class LeadController extends Controller
             'estatus' => 'nuevo',
         ]);
 
+        $this->notifyRecipient($lead);
+
         return $this->genericSuccess();
+    }
+
+    /**
+     * Sent after the response so the visitor never waits on SMTP, and a mail
+     * failure is reported without losing the lead (already saved).
+     */
+    private function notifyRecipient(Lead $lead): void
+    {
+        $to = $lead->notificationEmail();
+
+        if (! $to) {
+            return;
+        }
+
+        defer(fn () => Mail::to($to)->send(new NewLeadMail($lead)));
     }
 
     private function genericSuccess(): RedirectResponse
