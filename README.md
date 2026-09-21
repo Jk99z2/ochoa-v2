@@ -123,6 +123,14 @@ git merge develop
 git push origin main
 ```
 
+## Versions and changelog
+
+Releases are tracked in `src/CHANGELOG.md` ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/) layout, [SemVer](https://semver.org/)). It lives under `src/` so the app container can read it. The admin panel renders it as a timeline under **Versiones** and shows the current version in the panel footer — the newest non-`Unreleased` heading *is* the app version, so there is nothing else to bump.
+
+While working, add entries (in Spanish, since agents read them) under `## [Unreleased]`. Before merging `develop` → `main`, rename that heading to `## [x.y.z] - YYYY-MM-DD` and add a fresh empty `[Unreleased]` above it. Use these section headings: `Agregado`, `Cambiado`, `Corregido`, `Seguridad`. Bump the minor version for new features, the patch version for fixes.
+
+Optionally tag the release too: `git tag vX.Y.Z && git push --tags`.
+
 ## Deploying (server-side)
 
 **On the server**, pull the latest code into the relevant folder and rebuild:
@@ -165,6 +173,30 @@ Two separate `.env` layers exist per deployment:
 2. **`src/.env`** (Laravel app-level, gitignored) — standard Laravel config, must have matching DB credentials to `.env.prod`.
 
 Never commit either file. `src/.env.example` documents the expected keys.
+
+## Lead email notifications
+
+When the public contact form creates a lead, an email (`App\Mail\NewLeadMail`) is sent **after the response** (via `defer()`, so no queue worker is needed) to the first available of:
+
+1. the agent the lead was addressed to (`agente_id`),
+2. the agent that owns the property,
+3. the office address in **Admin → Configuración → `email_contacto`**.
+
+Inactive agents are skipped. The email's Reply-To is the visitor's address, so the agent can just hit reply. If nobody can be notified, or sending fails, the lead is still saved and visible in the admin panel.
+
+Outgoing mail needs real SMTP settings in each environment's `src/.env` (the default `MAIL_MAILER=log` only writes to the log):
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=...
+MAIL_PORT=587
+MAIL_USERNAME=...
+MAIL_PASSWORD=...
+MAIL_FROM_ADDRESS=notificaciones@ochoarealestateservices.com
+MAIL_FROM_NAME="Ochoa Real Estate Services"
+```
+
+Leave staging on `MAIL_MAILER=log` — it holds a copy of production leads and agent emails, and you don't want it mailing real agents.
 
 ## Known gotchas
 

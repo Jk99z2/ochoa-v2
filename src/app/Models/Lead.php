@@ -30,4 +30,19 @@ class Lead extends Model
     {
         return $this->belongsTo(Agente::class);
     }
+
+    /**
+     * Who should hear about this lead: the agent it was addressed to, else the
+     * property's agent, else the office contact address from the site settings.
+     */
+    public function notificationEmail(): ?string
+    {
+        foreach ([$this->agente, $this->propiedad?->agente] as $agente) {
+            if ($agente?->activo && $agente->email) {
+                return $agente->email;
+            }
+        }
+
+        return Configuracion::actual()->email_contacto ?: null;
+    }
 }
