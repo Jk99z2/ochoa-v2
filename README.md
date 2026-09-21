@@ -123,6 +123,14 @@ git merge develop
 git push origin main
 ```
 
+## Versions and changelog
+
+Releases are tracked in `src/CHANGELOG.md` ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/) layout, [SemVer](https://semver.org/)). It lives under `src/` so the app container can read it. The admin panel renders it as a timeline under **Versiones** and shows the current version in the panel footer — the newest non-`Unreleased` heading *is* the app version, so there is nothing else to bump.
+
+While working, add entries (in Spanish, since agents read them) under `## [Unreleased]`. Before merging `develop` → `main`, rename that heading to `## [x.y.z] - YYYY-MM-DD` and add a fresh empty `[Unreleased]` above it. Use these section headings: `Agregado`, `Cambiado`, `Corregido`, `Seguridad`. Bump the minor version for new features, the patch version for fixes.
+
+Optionally tag the release too: `git tag vX.Y.Z && git push --tags`.
+
 ## Deploying (server-side)
 
 **On the server**, pull the latest code into the relevant folder and rebuild:
@@ -166,14 +174,6 @@ Two separate `.env` layers exist per deployment:
 
 Never commit either file. `src/.env.example` documents the expected keys.
 
-## Known gotchas
-
-- **`fastcgi_pass app:9000` in nginx configs will break when both prod and staging run on the same server.** Docker DNS can resolve a generic hostname to either app container if they share a network, causing random cross-contamination between environments (wrong session cookies, mismatched Livewire asset hashes, intermittent 404s). Always use the explicit container name (`ochoa2_app:9000` for prod, `ochoa2_staging_app:9000` for staging).
-- **Do not run `php artisan config:cache` in production** with the current Livewire/Filament version combination — it has caused the served HTML's Livewire asset hash to diverge from the cached route table, breaking the admin login flow. `route:cache` and `view:cache` are safe; leave config uncached for now. Revisit if upgrading Livewire/Filament.
-- **`User` model must implement `Filament\Models\Contracts\FilamentUser`** with a `canAccessPanel()` method — Filament blocks panel access by default outside the `local` environment without this.
-- **`bootstrap/app.php` needs `$middleware->trustProxies(at: '*')`** inside `withMiddleware()` — without it, Laravel doesn't trust the `X-Forwarded-Proto` header from Nginx Proxy Manager and generates `http://` URLs even when served over HTTPS, causing mixed-content browser errors.
-- **File uploads (Filament `FileUpload` components) must explicitly set `->disk("public")`** — Laravel's default local disk root changed in recent versions and uploads can silently land in a non-web-accessible location otherwise.
-- **PHP-FPM/OPcache:** the Dockerfile sets `opcache.validate_timestamps=1` and `revalidate_freq=0` for dev (picks up file changes immediately). Confirm these are appropriate for your environment if debugging stale-code symptoms after a deploy — when in doubt, `docker compose restart app` forces a clean reload.
 ## Lead email notifications
 
 When the public contact form creates a lead, an email (`App\Mail\NewLeadMail`) is sent **after the response** (via `defer()`, so no queue worker is needed) to the first available of:
@@ -198,6 +198,14 @@ MAIL_FROM_NAME="Ochoa Real Estate Services"
 
 Leave staging on `MAIL_MAILER=log` — it holds a copy of production leads and agent emails, and you don't want it mailing real agents.
 
+## Known gotchas
+
+- **`fastcgi_pass app:9000` in nginx configs will break when both prod and staging run on the same server.** Docker DNS can resolve a generic hostname to either app container if they share a network, causing random cross-contamination between environments (wrong session cookies, mismatched Livewire asset hashes, intermittent 404s). Always use the explicit container name (`ochoa2_app:9000` for prod, `ochoa2_staging_app:9000` for staging).
+- **Do not run `php artisan config:cache` in production** with the current Livewire/Filament version combination — it has caused the served HTML's Livewire asset hash to diverge from the cached route table, breaking the admin login flow. `route:cache` and `view:cache` are safe; leave config uncached for now. Revisit if upgrading Livewire/Filament.
+- **`User` model must implement `Filament\Models\Contracts\FilamentUser`** with a `canAccessPanel()` method — Filament blocks panel access by default outside the `local` environment without this.
+- **`bootstrap/app.php` needs `$middleware->trustProxies(at: '*')`** inside `withMiddleware()` — without it, Laravel doesn't trust the `X-Forwarded-Proto` header from Nginx Proxy Manager and generates `http://` URLs even when served over HTTPS, causing mixed-content browser errors.
+- **File uploads (Filament `FileUpload` components) must explicitly set `->disk("public")`** — Laravel's default local disk root changed in recent versions and uploads can silently land in a non-web-accessible location otherwise.
+- **PHP-FPM/OPcache:** the Dockerfile sets `opcache.validate_timestamps=1` and `revalidate_freq=0` for dev (picks up file changes immediately). Confirm these are appropriate for your environment if debugging stale-code symptoms after a deploy — when in doubt, `docker compose restart app` forces a clean reload.
 - **`docker/nginx/default.conf` is gitignored and maintained independently per environment** — it is never committed, so a `git pull` on any server can never overwrite another environment's live config. Each machine (local dev, staging, prod) keeps its own local copy, created once from the tracked template `docker/nginx/default.conf.example` and then edited for that environment's `fastcgi_pass` value: `app:9000` locally, `ochoa2_staging_app:9000` on staging, `ochoa2_app:9000` on prod.
 - **If `docker compose up` fails with `error mounting .../docker/nginx/default.conf ... not a directory`**, Docker auto-created an empty directory where the file should be — this happens on a fresh clone or new server, since the real file is gitignored by design (see above) and doesn't exist until you create it. Fix: `sudo rm -rf docker/nginx/default.conf` (needs sudo since Docker creates it as root), then `cp docker/nginx/default.conf.example docker/nginx/default.conf` and set the correct `fastcgi_pass` value for this environment.
 

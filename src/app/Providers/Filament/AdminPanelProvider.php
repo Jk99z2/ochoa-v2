@@ -38,6 +38,10 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn (): string => view('filament.partials.og-meta')->render(),
             )
+            ->renderHook(
+                PanelsRenderHook::FOOTER,
+                fn (): string => view('filament.partials.version-footer')->render(),
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
