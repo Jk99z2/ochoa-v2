@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-10-10
+
+### Corregido
+- Los íconos del pie de página (ubicación, teléfono, correo, horario) no se mostraban: las clases que usaba la plantilla no existían en `flaticon.css`. Ahora son SVG en línea, igual que el ícono de Facebook.
+
 ## [0.10.0] - 2026-10-10
 
 ### Quitado

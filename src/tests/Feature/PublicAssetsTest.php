@@ -50,4 +50,20 @@ class PublicAssetsTest extends TestCase
 
         $response->assertSee('<svg class="icon-facebook"', false);
     }
+
+    public function test_footer_contact_icons_render_as_inline_svgs_not_dead_icon_font_classes(): void
+    {
+        $response = $this->get('/');
+        $html = $response->getContent();
+
+        // Previously icon-map-marker/icon-phone/icon-envelope/icon-calendar, none of
+        // which exist in flaticon.css, so nothing ever rendered for these four icons.
+        $this->assertStringNotContainsString('icon-map-marker', $html);
+        $this->assertStringNotContainsString('icon-phone', $html);
+        $this->assertStringNotContainsString('icon-envelope', $html);
+        $this->assertStringNotContainsString('icon-calendar', $html);
+
+        // 5 icons total: pin, phone (oficina), phone (celular), envelope, calendar.
+        $this->assertSame(5, substr_count($html, '<span class="fi"><svg'));
+    }
 }
