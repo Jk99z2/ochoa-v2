@@ -7,6 +7,14 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-10
+
+### Agregado
+- Datos estructurados (JSON-LD, `RealEstateAgent` de schema.org) en todo el sitio público, para SEO local: nombre, teléfono, correo, dirección y coordenadas de la oficina, y enlaces a redes sociales. Solo incluye los campos que de verdad estén llenos en Configuración.
+- Nuevos campos **Latitud** y **Longitud** en Admin → Configuración → "Ubicación de la oficina", usados por esos datos estructurados.
+
+Pendiente: cargar la dirección, teléfono, correo y coordenadas reales de la oficina en Configuración para que los datos estructurados queden completos en producción.
+
 ## [0.10.1] - 2026-10-10
 
 ### Corregido
