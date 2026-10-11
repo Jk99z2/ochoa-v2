@@ -1,8 +1,9 @@
 @extends("layouts.public")
 
-@section("title", "Propiedades en Manzanillo, Colima - " . $siteConfig->nombre_sitio)
+@section("title", "Propiedades en Manzanillo, Colima" . ($propiedades->currentPage() > 1 ? " - Página " . $propiedades->currentPage() : "") . " - " . $siteConfig->nombre_sitio)
 
 @section("meta")
+  <link rel="canonical" href="{{ $canonical }}">
   <meta name="description" content="Explora casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Encuentra tu proxima propiedad con {{ $siteConfig->nombre_sitio }}.">
 @endsection
 

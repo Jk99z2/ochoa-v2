@@ -105,4 +105,15 @@ class WelcomePageTest extends TestCase
                 && $nuevas->last()->id === $older->id;
         });
     }
+
+    public function test_home_page_has_exactly_one_h1_and_a_canonical_tag(): void
+    {
+        $this->makePropiedad(['destacada' => true, 'publicada' => true]);
+        $this->makePropiedad(['destacada' => true, 'publicada' => true]);
+
+        $response = $this->get('/');
+
+        $response->assertSee('<link rel="canonical" href="'.url('/').'">', false);
+        $this->assertSame(1, preg_match_all('/<h1[ >]/', $response->getContent()));
+    }
 }

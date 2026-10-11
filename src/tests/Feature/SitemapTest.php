@@ -60,4 +60,11 @@ class SitemapTest extends TestCase
         $response->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
         $response->assertSee('Sitemap: '.url('/sitemap.xml'), false);
     }
+
+    public function test_robots_txt_disallows_the_admin_panel(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $response->assertSee('Disallow: /admin', false);
+    }
 }

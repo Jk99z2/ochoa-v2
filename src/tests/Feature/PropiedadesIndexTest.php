@@ -130,4 +130,33 @@ class PropiedadesIndexTest extends TestCase
 
         $response->assertSee('No se encontraron propiedades con esos filtros.');
     }
+
+    public function test_canonical_is_the_bare_listing_url_with_no_params(): void
+    {
+        $response = $this->get('/propiedades');
+
+        $response->assertSee('<link rel="canonical" href="'.url('/propiedades').'">', false);
+    }
+
+    public function test_canonical_keeps_filters_that_change_the_results(): void
+    {
+        $response = $this->get('/propiedades?operacion=renta&min_price=100000');
+
+        $response->assertSee(
+            '<link rel="canonical" href="'.url('/propiedades').'?operacion=renta&amp;min_price=100000">',
+            false,
+        );
+    }
+
+    public function test_canonical_and_title_reflect_the_current_page_but_drop_unknown_params(): void
+    {
+        for ($i = 0; $i < 10; $i++) {
+            $this->makePropiedad();
+        }
+
+        $response = $this->get('/propiedades?page=2&utm_source=newsletter');
+
+        $response->assertSee('<link rel="canonical" href="'.url('/propiedades').'?page=2">', false);
+        $response->assertSee('Página 2');
+    }
 }

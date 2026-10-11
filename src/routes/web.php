@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get("/sitemap.xml", [SitemapController::class, "index"])->name("sitemap");
 
 Route::get("/robots.txt", function () {
-    return response("User-agent: *\nDisallow:\n\nSitemap: " . url("/sitemap.xml") . "\n")
+    return response("User-agent: *\nDisallow: /admin\n\nSitemap: " . url("/sitemap.xml") . "\n")
         ->header("Content-Type", "text/plain");
 });
 
@@ -93,7 +93,22 @@ Route::get("/propiedades", function (Request $request) {
 
     $propiedades = $query->latest()->paginate(9)->withQueryString();
 
-    return view("propiedades.index", compact("propiedades", "navTipos", "navMunicipios"));
+    // Canonical only reflects params that actually change the result set, so
+    // tracking/junk query strings never create duplicate-content variants.
+    $canonicalParams = collect(["tipo", "operacion", "min_price", "max_price", "municipio"])
+        ->mapWithKeys(fn ($key) => [$key => $request->query($key)])
+        ->filter(fn ($value) => filled($value))
+        ->all();
+
+    if ($propiedades->currentPage() > 1) {
+        $canonicalParams["page"] = $propiedades->currentPage();
+    }
+
+    $canonical = $canonicalParams === []
+        ? url("/propiedades")
+        : url("/propiedades") . "?" . http_build_query($canonicalParams);
+
+    return view("propiedades.index", compact("propiedades", "navTipos", "navMunicipios", "canonical"));
 })->name("propiedades.index");
 
 Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Request $request) {

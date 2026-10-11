@@ -208,6 +208,12 @@ Leave staging on `MAIL_MAILER=log` — it holds a copy of production leads and a
 - **PHP-FPM/OPcache:** the Dockerfile sets `opcache.validate_timestamps=1` and `revalidate_freq=0` for dev (picks up file changes immediately). Confirm these are appropriate for your environment if debugging stale-code symptoms after a deploy — when in doubt, `docker compose restart app` forces a clean reload.
 - **`docker/nginx/default.conf` is gitignored and maintained independently per environment** — it is never committed, so a `git pull` on any server can never overwrite another environment's live config. Each machine (local dev, staging, prod) keeps its own local copy, created once from the tracked template `docker/nginx/default.conf.example` and then edited for that environment's `fastcgi_pass` value: `app:9000` locally, `ochoa2_staging_app:9000` on staging, `ochoa2_app:9000` on prod.
 - **If `docker compose up` fails with `error mounting .../docker/nginx/default.conf ... not a directory`**, Docker auto-created an empty directory where the file should be — this happens on a fresh clone or new server, since the real file is gitignored by design (see above) and doesn't exist until you create it. Fix: `sudo rm -rf docker/nginx/default.conf` (needs sudo since Docker creates it as root), then `cp docker/nginx/default.conf.example docker/nginx/default.conf` and set the correct `fastcgi_pass` value for this environment.
+- **If `git pull`/`deploy-*.sh` fails with `error: The following untracked working tree files would be overwritten by merge: docker-compose.staging.yml` (or `docker-compose.prod.yml`)**, that server's copy of the file predates it being added to git tracking, so git won't silently clobber it. Before doing anything else, confirm the server's copy actually matches what's now tracked:
+  ```bash
+  git show origin/develop:docker-compose.staging.yml > /tmp/incoming.yml   # or docker-compose.prod.yml / origin/main
+  diff docker-compose.staging.yml /tmp/incoming.yml
+  ```
+  **No output** (identical): safe to just `git add docker-compose.staging.yml && git pull`. **Output** (the server's copy was hand-edited after being tracked, e.g. a port or `mem_limit` tweak that was never committed): back it up (`cp docker-compose.staging.yml docker-compose.staging.yml.server-backup`), fold any real values you want to keep into the file, then `git add` and pull. Run these from the repo root (`~/ochoa-v2` or `~/ochoa-v2-staging`), not from `deploy/` — the path is relative to the root.
 
 ## Admin panel access
 
