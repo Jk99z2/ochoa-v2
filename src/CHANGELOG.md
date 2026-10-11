@@ -7,6 +7,15 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-10
+
+### Quitado
+- Se eliminaron del sitio público cerca de 3.75 MB de CSS/JS/fuentes que nunca se usaban: Bootstrap (cargado desde un CDN externo), Animate.css, Owl Carousel, Magnific Popup, AOS, bootstrap-datepicker, tres copias de jQuery y sus plugins, y las fuentes de iconos icomoon/ionicons/open-iconic. Ninguna de esas librerías estaba enlazada desde ninguna vista: el carrusel de inicio, el slider de propiedades y la galería de la ficha ya estaban hechos en JavaScript propio, sin jQuery.
+- El ícono de Facebook (la única razón por la que se cargaba la fuente de iconos icomoon, de 1.8 MB) ahora es un SVG en línea.
+
+### Agregado
+- `rel="preconnect"` hacia Google Fonts, para que esa fuente cargue un poco más rápido.
+
 ## [0.9.0] - 2026-10-10
 
 ### Agregado
