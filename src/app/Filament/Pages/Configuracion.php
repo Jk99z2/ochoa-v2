@@ -125,6 +125,21 @@ class Configuracion extends Page
                             ->rows(2)
                             ->helperText("Pega la URL completa del atributo src del iframe de Google Maps."),
                     ]),
+
+                Section::make("Ubicación de la oficina")
+                    ->description("Coordenadas exactas de la oficina, usadas en los datos estructurados (SEO local) que leen Google y otros buscadores.")
+                    ->columns(2)
+                    ->components([
+                        TextInput::make("lat")
+                            ->label("Latitud")
+                            ->numeric()
+                            ->helperText("Desde Google Maps: clic derecho en el punto exacto > copiar el primer número."),
+
+                        TextInput::make("lng")
+                            ->label("Longitud")
+                            ->numeric()
+                            ->helperText("Desde Google Maps: clic derecho en el punto exacto > copiar el segundo número."),
+                    ]),
             ]);
     }
 
