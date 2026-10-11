@@ -5,6 +5,7 @@
 @section("meta")
   <link rel="canonical" href="{{ $canonical }}">
   <meta name="description" content="Explora casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Encuentra tu proxima propiedad con {{ $siteConfig->nombre_sitio }}.">
+  <script type="application/ld+json">{!! json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endsection
 
 @push("styles")
@@ -13,6 +14,19 @@
 
 @section("content")
 @include("partials.nav")
+
+@php
+  $crumbs = [
+    ["name" => "Inicio", "url" => url("/")],
+    ["name" => "Propiedades", "url" => $tipoActual ? route("propiedades.index") : null],
+  ];
+  if ($tipoActual) {
+    $crumbs[] = ["name" => $tipoActual->nombre, "url" => null];
+  }
+@endphp
+<div class="wrap">
+  @include("partials.breadcrumbs", ["crumbs" => $crumbs])
+</div>
 
 <section class="listing-hero">
   <div class="wrap">

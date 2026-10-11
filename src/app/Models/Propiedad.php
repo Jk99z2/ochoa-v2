@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Propiedad extends Model
 {
@@ -82,5 +83,109 @@ class Propiedad extends Model
     public function amenidades(): BelongsToMany
     {
         return $this->belongsToMany(Amenidad::class, 'amenidad_propiedad');
+    }
+
+    /**
+     * JSON-LD for this listing (schema.org RealEstateListing wrapping an
+     * Accommodation subtype + an Offer). Only represents what the detail
+     * page actually shows a visitor - Google requires structured data to
+     * match visible content, and `ocultar_direccion` is a deliberate privacy
+     * choice the agent made, so it's respected here exactly like the page
+     * respects it (precise geo dropped, street address never included,
+     * since it's never shown even when the address isn't hidden).
+     */
+    public function realEstateListingSchema(): array
+    {
+        $about = array_filter([
+            '@type' => $this->accommodationSchemaType(),
+            'name' => $this->titulo,
+        ]);
+
+        if ($this->municipio) {
+            $about['address'] = [
+                '@type' => 'PostalAddress',
+                'addressLocality' => $this->municipio->nombre,
+                'addressRegion' => $this->estado_mx,
+                'addressCountry' => 'MX',
+            ];
+        }
+
+        if ($this->lat !== null && $this->lng !== null && ! $this->ocultar_direccion) {
+            $about['geo'] = [
+                '@type' => 'GeoCoordinates',
+                'latitude' => (float) $this->lat,
+                'longitude' => (float) $this->lng,
+            ];
+        }
+
+        if ($this->recamaras) {
+            $about['numberOfBedrooms'] = $this->recamaras;
+        }
+
+        if ($this->banios) {
+            $about['numberOfBathroomsTotal'] = (float) $this->banios;
+        }
+
+        if ($this->m2_construccion) {
+            $about['floorSize'] = [
+                '@type' => 'QuantitativeValue',
+                'value' => (float) $this->m2_construccion,
+                'unitCode' => 'MTK',
+            ];
+        }
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'RealEstateListing',
+            'name' => $this->titulo,
+            'url' => route('propiedades.show', $this->slug),
+            'about' => $about,
+            'offers' => array_filter([
+                '@type' => 'Offer',
+                'price' => (float) $this->precio,
+                'priceCurrency' => $this->moneda,
+                'availability' => $this->availabilitySchemaType(),
+                'businessFunction' => match ($this->operacion) {
+                    'venta' => 'https://schema.org/Sell',
+                    'renta' => 'https://schema.org/LeaseOut',
+                    default => null, // venta_renta: one price can't represent both unambiguously
+                },
+            ]),
+        ];
+
+        if ($this->descripcion) {
+            $schema['description'] = $this->descripcion;
+        }
+
+        if ($this->imagenes->isNotEmpty()) {
+            $schema['image'] = $this->imagenes->take(8)->map(fn (Imagen $imagen) => Storage::url($imagen->path))->values()->all();
+        }
+
+        if ($this->published_at) {
+            $schema['datePosted'] = $this->published_at->toDateString();
+        }
+
+        return $schema;
+    }
+
+    private function accommodationSchemaType(): string
+    {
+        $nombre = mb_strtolower($this->tipo?->nombre ?? '');
+
+        return match (true) {
+            str_contains($nombre, 'casa') => 'SingleFamilyResidence',
+            str_contains($nombre, 'depa') || str_contains($nombre, 'apart') || str_contains($nombre, 'condo') => 'Apartment',
+            default => 'Place', // terreno, local comercial, oficina, etc. - no closer schema.org fit
+        };
+    }
+
+    private function availabilitySchemaType(): string
+    {
+        return match ($this->estado) {
+            'disponible' => 'https://schema.org/InStock',
+            'apartada' => 'https://schema.org/LimitedAvailability',
+            'vendida', 'rentada' => 'https://schema.org/SoldOut',
+            default => 'https://schema.org/InStock',
+        };
     }
 }

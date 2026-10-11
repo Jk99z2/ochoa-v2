@@ -11,6 +11,7 @@
   @if ($propiedad->imagenes->isNotEmpty())
     <meta property="og:image" content="{{ Storage::url($propiedad->imagenes->first()->path) }}">
   @endif
+  @include("partials.real-estate-listing-schema")
 @endsection
 
 @push("styles")
@@ -23,6 +24,20 @@
 @endif
 
 @include("partials.nav")
+
+@php
+  $crumbs = [
+    ["name" => "Inicio", "url" => url("/")],
+    ["name" => "Propiedades", "url" => route("propiedades.index")],
+  ];
+  if ($propiedad->tipo) {
+    $crumbs[] = ["name" => $propiedad->tipo->nombre, "url" => route("propiedades.index", ["tipo" => $propiedad->tipo->slug])];
+  }
+  $crumbs[] = ["name" => $propiedad->titulo, "url" => null];
+@endphp
+<div class="wrap">
+  @include("partials.breadcrumbs", ["crumbs" => $crumbs])
+</div>
 
 <section class="detail-gallery">
   <div class="wrap">

@@ -159,4 +159,26 @@ class PropiedadesIndexTest extends TestCase
         $response->assertSee('<link rel="canonical" href="'.url('/propiedades').'?page=2">', false);
         $response->assertSee('Página 2');
     }
+
+    public function test_item_list_schema_only_includes_properties_on_the_current_page(): void
+    {
+        // Explicit timestamps: ->latest() ties on identical created_at would
+        // otherwise make which 9 land on page 1 non-deterministic.
+        $shown = $this->makePropiedad(['titulo' => 'Visible en pagina 1']);
+        $shown->forceFill(['created_at' => now()])->save();
+
+        for ($i = 0; $i < 8; $i++) {
+            $p = $this->makePropiedad();
+            $p->forceFill(['created_at' => now()->subMinutes($i + 1)])->save();
+        }
+
+        $notShown = $this->makePropiedad(['titulo' => 'Solo en pagina 2']);
+        $notShown->forceFill(['created_at' => now()->subDay()])->save();
+
+        $html = $this->get('/propiedades')->getContent();
+
+        $this->assertStringContainsString('"@type":"ItemList"', $html);
+        $this->assertStringContainsString('"url":"'.route('propiedades.show', $shown->slug).'"', $html);
+        $this->assertStringNotContainsString($notShown->slug, $html);
+    }
 }

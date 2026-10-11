@@ -67,10 +67,14 @@ Route::get("/propiedades", function (Request $request) {
             $q->orderByDesc("principal")->orderBy("orden");
         }]);
 
+    // Resolved once here (not just filtered via whereHas) so the breadcrumb
+    // can show the type's actual name, e.g. "Casas", not just echo the slug back.
+    $tipoActual = $request->filled("tipo") ? Tipo::where("slug", $request->tipo)->first() : null;
+
     if ($request->filled("tipo")) {
-        $query->whereHas("tipo", function ($q) use ($request) {
-            $q->where("slug", $request->tipo);
-        });
+        // 0 never matches any id, preserving the old whereHas behaviour of an
+        // empty result set for a tipo slug that doesn't exist.
+        $query->where("tipo_id", $tipoActual->id ?? 0);
     }
 
     if ($request->filled("operacion")) {
@@ -108,7 +112,22 @@ Route::get("/propiedades", function (Request $request) {
         ? url("/propiedades")
         : url("/propiedades") . "?" . http_build_query($canonicalParams);
 
-    return view("propiedades.index", compact("propiedades", "navTipos", "navMunicipios", "canonical"));
+    // Only the properties actually shown on this page of results - matching
+    // what's visible, same rule as everywhere else structured data is used here.
+    $itemListSchema = [
+        "@context" => "https://schema.org",
+        "@type" => "ItemList",
+        "itemListElement" => $propiedades->values()->map(fn (Propiedad $p, int $i) => [
+            "@type" => "ListItem",
+            "position" => $i + 1,
+            "url" => route("propiedades.show", $p->slug),
+            "name" => $p->titulo,
+        ])->all(),
+    ];
+
+    return view("propiedades.index", compact(
+        "propiedades", "navTipos", "navMunicipios", "canonical", "tipoActual", "itemListSchema",
+    ));
 })->name("propiedades.index");
 
 Route::get("/propiedades/{slug}", function (string $slug, \Illuminate\Http\Request $request) {

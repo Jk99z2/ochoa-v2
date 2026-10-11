@@ -7,6 +7,13 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-11
+
+### Agregado
+- Migas de pan (breadcrumbs) visibles en el listado y en la ficha de cada propiedad, con su versión en datos estructurados (`BreadcrumbList`) generada a partir del mismo arreglo que la versión visible, para que nunca queden desincronizadas.
+- Datos estructurados por propiedad (`RealEstateListing`) en cada ficha: precio, operación (venta/renta), disponibilidad, recámaras, baños, superficie de construcción, imágenes y ubicación. Respeta "Ocultar dirección": si está activo, no se incluyen las coordenadas exactas, igual que en la página visible.
+- Datos estructurados (`ItemList`) en el listado de propiedades, con solo las propiedades que se ven en esa página.
+
 ## [0.11.0] - 2026-10-10
 
 ### Agregado
