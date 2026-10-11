@@ -5,6 +5,20 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de git.
 
+## [Unreleased]
+
+## [0.9.0] - 2026-10-10
+
+### Agregado
+- Etiqueta `<link rel="canonical">` en inicio, listado y ficha de propiedad, para que los buscadores sepan cuál es la URL "oficial" de cada página. En el listado, la canónica solo conserva los filtros que de verdad cambian los resultados (tipo, operación, precio, municipio, página) e ignora cualquier otro parámetro (por ejemplo, de campañas publicitarias). En la ficha de propiedad, ignora el parámetro `agente` usado para el enlace de referido.
+- El listado de propiedades agrega "Página N" al título cuando se navega más allá de la página 1, para que cada página pagina se vea distinta ante los buscadores.
+
+### Seguridad
+- El panel de administración (`/admin`) ya no es indexable por buscadores: se agregó `Disallow: /admin` en `robots.txt` y un encabezado `X-Robots-Tag: noindex, nofollow` en todas sus páginas, incluyendo el login.
+
+### Corregido
+- La página de inicio podía generar más de un `<h1>` cuando había más de una propiedad destacada, porque el título rotaba dentro del carrusel. Ahora el carrusel usa `<h2>` por propiedad, y la página tiene un único `<h1>` (tomado de "Configuración del sitio" si está definido, o un texto por defecto).
+
 ## [0.8.0] - 2026-09-21
 
 ### Agregado

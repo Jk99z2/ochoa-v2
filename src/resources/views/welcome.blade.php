@@ -3,6 +3,7 @@
 @section("title", $siteConfig->nombre_sitio . " - Manzanillo, Colima")
 
 @section("meta")
+  <link rel="canonical" href="{{ url('/') }}">
   <meta name="description" content="Encuentra casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Ochoa Real Estate Services, tu inmobiliaria de confianza.">
   <meta property="og:title" content="Ochoa Real Estate Services - Manzanillo, Colima">
   <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
@@ -23,6 +24,11 @@
 @include("partials.nav")
 
 <section class="hero" id="hero">
+  {{-- The page's one real H1: a rotating property name isn't a stable, meaningful
+       heading, and looping it per-slide would emit multiple H1s once more than
+       one property is destacada. Visually hidden so the carousel design is unchanged. --}}
+  <h1 class="visually-hidden">{{ $siteConfig->hero_titulo ?: 'Ochoa Real Estate Services - Bienes raíces en Manzanillo, Colima' }}</h1>
+
   @foreach ($destacadas as $i => $p)
     <div class="hero-slide @if($i === 0) active @endif" data-idx="{{ $i }}">
       @if ($p->imagenes->isNotEmpty())
@@ -36,7 +42,7 @@
       @foreach ($destacadas as $i => $p)
         <div class="hero-text @if($i === 0) active @endif" data-idx="{{ $i }}">
           <div class="hero-tag">{{ $p->municipio?->nombre }}, {{ $p->estado_mx }}</div>
-          <h1 class="hero-title">{{ $p->titulo }}</h1>
+          <h2 class="hero-title">{{ $p->titulo }}</h2>
           <p class="hero-desc">{{ $p->descripcion }}</p>
           <span class="hero-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
           <a href="{{ route("propiedades.show", $p->slug) }}" class="hero-cta">

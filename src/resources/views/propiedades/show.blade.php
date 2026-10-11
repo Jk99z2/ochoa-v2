@@ -3,6 +3,7 @@
 @section("title", $propiedad->titulo . " - " . $siteConfig->nombre_sitio)
 
 @section("meta")
+  <link rel="canonical" href="{{ route('propiedades.show', $propiedad->slug) }}">
   <meta name="description" content="{{ Str::limit($propiedad->descripcion ?? $propiedad->titulo, 155) }}">
   <meta property="og:title" content="{{ $propiedad->titulo }} - {{ $siteConfig->nombre_sitio }}">
   <meta property="og:description" content="{{ Str::limit($propiedad->descripcion ?? $propiedad->titulo, 155) }}">
