@@ -7,6 +7,15 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-12
+
+### Agregado
+- Ícono para "Agregar a pantalla de inicio" en iOS (`apple-touch-icon`), generado a partir del logo del sitio.
+
+### Corregido
+- `http://` y `www.` ahora redirigen (301) a la versión canónica `https://` sin `www`, en vez de servirse como copias independientes con código 200. Detectado por una auditoría SEO externa como error crítico: dividía las señales de posicionamiento entre varias versiones de la misma página.
+- Varias palabras sin acento en el sitio público: "Operación", "Precio máximo", "aquí", "teléfono", "Recámaras", "Baños", "Descripción", "Ubicación", "Información", "Contáctanos", "construcción", "Página" (en la paginación del carrusel).
+
 ## [0.12.1] - 2026-10-12
 
 ### Corregido

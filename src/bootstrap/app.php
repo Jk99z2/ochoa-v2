@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RedirectToCanonicalHost;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
+        // Global (not just the "web" group) so /admin, /sitemap.xml, etc. are
+        // covered too, and first, so a redirect never pays for a session start.
+        $middleware->prepend(RedirectToCanonicalHost::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

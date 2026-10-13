@@ -52,7 +52,7 @@
         </div>
 
         <div class="filter-group">
-          <label>Operacion</label>
+          <label>Operación</label>
           <select name="operacion">
             <option value="">Todas</option>
             <option value="venta" @selected(request("operacion") === "venta")>Venta</option>
@@ -77,7 +77,7 @@
         </div>
 
         <div class="filter-group">
-          <label>Precio maximo</label>
+          <label>Precio máximo</label>
           <input type="number" name="max_price" value="{{ request("max_price") }}" placeholder="Sin limite">
         </div>
 

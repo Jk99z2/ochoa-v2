@@ -19,14 +19,14 @@
         </div>
       </div>
       <div>
-        <h3>Informacion</h3>
+        <h3>Información</h3>
         <ul class="footer-links">
           <li><a href="/">Inicio</a></li>
           <li><a href="{{ route("propiedades.index") }}">Propiedades</a></li>
         </ul>
       </div>
       <div>
-        <h3>Contactanos</h3>
+        <h3>Contáctanos</h3>
         <ul class="footer-contact">
           <li><span class="fi">{!! $iconPin !!}</span><span>{{ $siteConfig->direccion }}</span></li>
           <li><span class="fi">{!! $iconPhone !!}</span><a href="tel:{{ preg_replace("/[^0-9+]/", "", $siteConfig->telefono_oficina) }}">{{ $siteConfig->telefono_oficina }} Oficina</a></li>

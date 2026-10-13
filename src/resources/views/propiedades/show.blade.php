@@ -87,16 +87,16 @@
 
       <div class="detail-stats">
         @if ($propiedad->m2_terreno)<div class="stat"><span class="stat-num">{{ $propiedad->m2_terreno }}</span><span class="stat-label">m2 terreno</span></div>@endif
-        @if ($propiedad->m2_construccion)<div class="stat"><span class="stat-num">{{ $propiedad->m2_construccion }}</span><span class="stat-label">m2 construccion</span></div>@endif
-        @if ($propiedad->recamaras)<div class="stat"><span class="stat-num">{{ $propiedad->recamaras }}</span><span class="stat-label">Recamaras</span></div>@endif
-        @if ($propiedad->banios)<div class="stat"><span class="stat-num">{{ $propiedad->banios }}</span><span class="stat-label">Banos</span></div>@endif
+        @if ($propiedad->m2_construccion)<div class="stat"><span class="stat-num">{{ $propiedad->m2_construccion }}</span><span class="stat-label">m2 construcción</span></div>@endif
+        @if ($propiedad->recamaras)<div class="stat"><span class="stat-num">{{ $propiedad->recamaras }}</span><span class="stat-label">Recámaras</span></div>@endif
+        @if ($propiedad->banios)<div class="stat"><span class="stat-num">{{ $propiedad->banios }}</span><span class="stat-label">Baños</span></div>@endif
         @if ($propiedad->niveles)<div class="stat"><span class="stat-num">{{ $propiedad->niveles }}</span><span class="stat-label">Niveles</span></div>@endif
         @if ($propiedad->estacionamientos)<div class="stat"><span class="stat-num">{{ $propiedad->estacionamientos }}</span><span class="stat-label">Estacionamientos</span></div>@endif
       </div>
 
       @if ($propiedad->descripcion)
         <div class="detail-section">
-          <h2 class="detail-subtitle">Descripcion</h2>
+          <h2 class="detail-subtitle">Descripción</h2>
           <p class="detail-desc">{{ $propiedad->descripcion }}</p>
         </div>
       @endif
@@ -114,7 +114,7 @@
 
       @if ($propiedad->lat && $propiedad->lng && !$propiedad->ocultar_direccion)
         <div class="detail-section">
-          <h2 class="detail-subtitle">Ubicacion</h2>
+          <h2 class="detail-subtitle">Ubicación</h2>
           <iframe
             width="100%"
             height="360"
@@ -126,7 +126,7 @@
         </div>
       @elseif ($propiedad->municipio)
         <div class="detail-section">
-          <h2 class="detail-subtitle">Ubicacion</h2>
+          <h2 class="detail-subtitle">Ubicación</h2>
           <p class="detail-desc">{{ $propiedad->colonia }}@if($propiedad->colonia), @endif{{ $propiedad->municipio->nombre }}, {{ $propiedad->estado_mx }}</p>
         </div>
       @endif
@@ -162,7 +162,7 @@
           <input type="hidden" name="agente_id" value="{{ $referrerAgente?->id }}">
           <input type="text" name="nombre" placeholder="Tu nombre" required>
           <input type="email" name="email" placeholder="Tu email">
-          <input type="tel" name="telefono" placeholder="Tu telefono">
+          <input type="tel" name="telefono" placeholder="Tu teléfono">
           <textarea name="mensaje" placeholder="Mensaje" rows="3">Me interesa esta propiedad: {{ $propiedad->titulo }}</textarea>
           @error("nombre")<p class="lead-error">{{ $message }}</p>@enderror
           <button type="submit" class="agent-cta">Enviar mensaje</button>
