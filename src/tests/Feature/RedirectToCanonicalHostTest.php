@@ -6,10 +6,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * Found via an SEO audit against production: http:// and www. both served
- * the site directly (200), with no redirect consolidating them onto one
- * canonical host+scheme - flagged as an error (split ranking/backlink
- * signal, risk of duplicate-content indexing).
+ * Found via an SEO audit against production: www. served the site directly
+ * (200) alongside the bare domain, with no redirect consolidating them onto
+ * one canonical host - flagged as an error (split ranking/backlink signal,
+ * risk of duplicate-content indexing).
+ *
+ * This does NOT also force https: see the class docblock on
+ * RedirectToCanonicalHost - an earlier version did, and caused a live
+ * infinite-redirect outage because X-Forwarded-Proto isn't reaching Laravel
+ * correctly through this app's proxy chain.
  */
 class RedirectToCanonicalHostTest extends TestCase
 {
@@ -25,29 +30,10 @@ class RedirectToCanonicalHostTest extends TestCase
         $response->assertStatus(301);
     }
 
-    public function test_http_redirects_to_https_when_canonical_is_https(): void
+    public function test_already_canonical_https_requests_are_never_redirected(): void
     {
-        config(['app.url' => 'https://example.com']);
-
-        $response = $this->get('http://example.com/propiedades');
-
-        $response->assertRedirect('https://example.com/propiedades');
-        $response->assertStatus(301);
-    }
-
-    public function test_www_and_http_together_redirect_once_not_in_a_chain(): void
-    {
-        config(['app.url' => 'https://example.com']);
-
-        $response = $this->get('http://www.example.com/');
-
-        // A single hop straight to the fully canonical URL, not two redirects.
-        $response->assertRedirect('https://example.com/');
-        $response->assertStatus(301);
-    }
-
-    public function test_already_canonical_requests_pass_through_unredirected(): void
-    {
+        // The exact scenario that caused the outage: an already-correct
+        // HTTPS request on the bare domain must never get redirected again.
         config(['app.url' => 'https://example.com']);
 
         $response = $this->get('https://example.com/propiedades');
@@ -55,10 +41,18 @@ class RedirectToCanonicalHostTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_plain_http_on_the_canonical_host_is_not_redirected(): void
+    {
+        // Deliberate: scheme is left to the edge (Cloudflare), not here.
+        config(['app.url' => 'https://example.com']);
+
+        $response = $this->get('http://example.com/propiedades');
+
+        $response->assertOk();
+    }
+
     public function test_local_dev_is_unaffected(): void
     {
-        // Default local/testing APP_URL has no www counterpart and the
-        // scheme already matches, so there's nothing to redirect.
         $response = $this->get('/');
 
         $response->assertOk();
