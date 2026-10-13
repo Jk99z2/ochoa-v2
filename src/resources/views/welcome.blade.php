@@ -93,7 +93,7 @@
         </select>
       </div>
       <div class="hs-field">
-        <label>Precio maximo</label>
+        <label>Precio máximo</label>
         <input type="number" name="max_price" placeholder="Sin limite">
       </div>
       <button type="submit" class="hs-submit">
@@ -133,7 +133,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
         <h3>Cuida tu inversion</h3>
-        <p>Manzanillo crece constantemente. Invertir aqui es siempre un acierto.</p>
+        <p>Manzanillo crece constantemente. Invertir aquí es siempre un acierto.</p>
       </div>
     </div>
   </div>
@@ -201,7 +201,7 @@
           <input type="email" name="email" placeholder="Tu email">
         </div>
         <div class="cf-row">
-          <input type="tel" name="telefono" placeholder="Tu telefono">
+          <input type="tel" name="telefono" placeholder="Tu teléfono">
         </div>
         <textarea name="mensaje" placeholder="Que tipo de propiedad buscas?" rows="4"></textarea>
         @error("nombre")<p class="lead-error">{{ $message }}</p>@enderror
@@ -307,7 +307,7 @@ function initSlider(trackId, prevId, nextId, dotsId) {
     }
     var html = "";
     for (var i = 0; i < pages; i++) {
-      html += '<button class="slider-dot" data-page="' + i + '" aria-label="Pagina ' + (i + 1) + '" type="button"></button>';
+      html += '<button class="slider-dot" data-page="' + i + '" aria-label="Página ' + (i + 1) + '" type="button"></button>';
     }
     dotsWrap.innerHTML = html;
     dotsWrap.querySelectorAll(".slider-dot").forEach(function(dot) {

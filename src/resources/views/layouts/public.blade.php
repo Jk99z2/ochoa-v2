@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/css/flaticon.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="{{ $siteConfig->favicon_path ? Storage::url($siteConfig->favicon_path) : '/logos/logochoa.png' }}" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logos/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
