@@ -39,7 +39,7 @@
   <div class="wrap listing-grid">
     <aside class="filters">
       <form method="GET" action="{{ route("propiedades.index") }}">
-        <h3 class="filters-title">Filtrar</h3>
+        <h2 class="filters-title">Filtrar</h2>
 
         <div class="filter-group">
           <label>Tipo</label>

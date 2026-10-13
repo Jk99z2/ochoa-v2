@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-10-12
+
+### Corregido
+- Jerarquía de encabezados: el pie de página saltaba de `h2` a `h4` sin pasar por `h3` (aparecía en toda página pública, ya que el pie se comparte), y el listado de propiedades saltaba de `h1` a `h3` directamente. Detectado con el SEO Checker de Yoast corrido contra el sitio en producción. Es un cambio solo de etiqueta HTML, sin efecto visual.
+
 ## [0.12.0] - 2026-10-11
 
 ### Agregado
