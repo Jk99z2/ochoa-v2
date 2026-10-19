@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-10-19
+
+### Cambiado
+- Los botones para compartir por WhatsApp y Facebook ahora son los íconos originales de cada red, en la misma línea que las etiquetas "Destacada" y el municipio, en vez de botones con texto al final del formulario de contacto.
+
 ## [0.15.0] - 2026-10-19
 
 ### Agregado
