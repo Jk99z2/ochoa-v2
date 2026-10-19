@@ -81,8 +81,12 @@
         <p class="detail-loc">{{ $propiedad->colonia }}@if($propiedad->colonia && $propiedad->municipio), @endif{{ $propiedad->municipio?->nombre }}, {{ $propiedad->estado_mx }}</p>
         <span class="detail-price">
           ${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}
+          @if ($propiedad->precio_por_m2)<span class="detail-price-period">/ m²</span>@endif
           @if ($propiedad->operacion === "renta")<span class="detail-price-period">/mes</span>@endif
         </span>
+        @if ($propiedad->precio_por_m2 && $propiedad->m2_terreno)
+          <p class="detail-ref">Total: ${{ number_format($propiedad->precio * $propiedad->m2_terreno, 0) }} {{ $propiedad->moneda }} ({{ $propiedad->m2_terreno }} m²)</p>
+        @endif
       </div>
 
       <div class="detail-stats">
@@ -109,6 +113,22 @@
               <li>{{ $amenidad->nombre }}</li>
             @endforeach
           </ul>
+        </div>
+      @endif
+
+      @if ($propiedad->tour_url)
+        <div class="detail-section">
+          <h2 class="detail-subtitle">Tour virtual 360°</h2>
+          <iframe
+            title="Tour virtual 360°"
+            width="100%"
+            height="480"
+            style="border:0;border-radius:6px;"
+            loading="lazy"
+            allow="fullscreen; gyroscope; accelerometer; xr-spatial-tracking"
+            allowfullscreen
+            src="{{ $propiedad->tour_url }}">
+          </iframe>
         </div>
       @endif
 

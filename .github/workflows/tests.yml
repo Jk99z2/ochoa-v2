@@ -28,6 +28,9 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3, bcmath, gd, zip, fileinfo, dom, curl, tokenizer
           coverage: none
 
+      - name: Install bsdtar (virtual tour .zip/.rar extraction)
+        run: sudo apt-get install -y --no-install-recommends libarchive-tools
+
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:

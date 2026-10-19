@@ -145,4 +145,17 @@ class RealEstateListingSchemaTest extends TestCase
 
         $this->assertStringContainsString('"@type":"RealEstateListing"', $html);
     }
+
+    public function test_per_m2_price_adds_a_unit_price_specification(): void
+    {
+        $schema = $this->makePropiedad(['precio' => 500, 'precio_por_m2' => true])->realEstateListingSchema();
+
+        $this->assertSame('MTK', $schema['offers']['priceSpecification']['unitCode']);
+        $this->assertSame(500.0, $schema['offers']['priceSpecification']['price']);
+    }
+
+    public function test_total_price_has_no_unit_price_specification(): void
+    {
+        $this->assertArrayNotHasKey('priceSpecification', $this->makePropiedad()->realEstateListingSchema()['offers']);
+    }
 }

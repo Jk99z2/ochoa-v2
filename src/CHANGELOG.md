@@ -7,6 +7,21 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-10-19
+
+### Agregado
+- Tour virtual 360° en la ficha de cada propiedad: si la propiedad tiene "URL de tour virtual", se muestra embebido en una sección "Tour virtual 360°", con pantalla completa y movimiento con el giroscopio del celular.
+- Nuevo campo **Subir tour virtual (.zip o .rar)** en Admin → Propiedades → "Multimedia y documentos": se sube el archivo .zip o .rar exportado de 3DVista (u otro programa) con su `index.htm`, y al guardar se descomprime en el servidor y llena la "URL de tour virtual" automáticamente. Máximo 95 MB por el límite de Cloudflare.
+- Opción **Precio por m²** en Admin → Propiedades → "Operación y precio", para terrenos que se venden por metro cuadrado. El precio se muestra como "$X MXN / m²" en el sitio y en el panel, y en la ficha de la propiedad se muestra también el total (precio × m² de terreno). El filtro de precio del listado compara contra ese total, para que un terreno de $500/m² no aparezca entre las propiedades de menos de $100,000.
+
+### Cambiado
+- Límite de subida de archivos aumentado a 100 MB en PHP y nginx (antes 2 MB en PHP y 32 MB en nginx), para que quepan los tours.
+
+### Seguridad
+- Del archivo del tour solo se extraen archivos web estáticos (imágenes, audio, video, HTML, JS, CSS, fuentes); cualquier otro archivo, como `.php` o `.htaccess`, se descarta (igual que los accesos directos/symlinks), para que nunca se pueda ejecutar código subido en el servidor.
+
+Pendiente: en cada servidor, cambiar `client_max_body_size` a `100M` en `docker/nginx/default.conf` (no está en git) y reconstruir la imagen con `docker compose up -d --build`. Al reemplazar un tour, la carpeta del anterior no se borra.
+
 ## [0.13.0] - 2026-10-12
 
 ### Agregado

@@ -44,7 +44,7 @@
           <div class="hero-tag">{{ $p->municipio?->nombre }}, {{ $p->estado_mx }}</div>
           <h2 class="hero-title">{{ $p->titulo }}</h2>
           <p class="hero-desc">{{ $p->descripcion }}</p>
-          <span class="hero-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}</span>
+          <span class="hero-price">${{ number_format($p->precio, 0) }} {{ $p->moneda }}@if ($p->precio_por_m2) / m²@endif</span>
           <a href="{{ route("propiedades.show", $p->slug) }}" class="hero-cta">
             Ver propiedad <span class="hero-cta-arrow"></span>
           </a>

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Propiedades\Schemas;
 use App\Models\Agente;
 use App\Models\Tipo;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -87,6 +88,11 @@ class PropiedadForm
                             ->default("MXN")
                             ->maxLength(3)
                             ->required(),
+
+                        Toggle::make("precio_por_m2")
+                            ->label("Precio por m²")
+                            ->helperText("Para terrenos que se venden por metro cuadrado: el precio se muestra como \"/ m²\" y el total se calcula con los m² de terreno.")
+                            ->default(false),
 
                         TextInput::make("mantenimiento")
                             ->label("Mantenimiento")
@@ -223,6 +229,14 @@ class PropiedadForm
                             ->label("URL de tour virtual")
                             ->url()
                             ->maxLength(255),
+
+                        FileUpload::make("tour_zip")
+                            ->label("Subir tour virtual (.zip o .rar)")
+                            ->helperText("Archivo .zip o .rar exportado de 3DVista u otro programa, con su index.htm. Al guardar, reemplaza la URL de tour virtual. Máximo 95 MB.")
+                            ->disk("local")
+                            ->directory("tour-uploads")
+                            ->rules(["extensions:zip,rar"])
+                            ->maxSize(95 * 1024),
 
                         TextInput::make("expediente")
                             ->label("Expediente")
