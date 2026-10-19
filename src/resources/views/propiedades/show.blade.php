@@ -9,7 +9,8 @@
   <meta property="og:description" content="{{ Str::limit($propiedad->descripcion ?? $propiedad->titulo, 155) }}">
   <meta property="og:type" content="website">
   @if ($propiedad->imagenes->isNotEmpty())
-    <meta property="og:image" content="{{ Storage::url($propiedad->imagenes->first()->path) }}">
+    {{-- The thumbnail, not the original: WhatsApp drops og:images over ~600 KB and shows the site icon instead. --}}
+    <meta property="og:image" content="{{ $propiedad->imagenes->first()->thumb_url }}">
   @endif
   @include("partials.real-estate-listing-schema")
 @endsection

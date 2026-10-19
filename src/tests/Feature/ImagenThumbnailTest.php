@@ -81,4 +81,14 @@ class ImagenThumbnailTest extends TestCase
 
         Storage::disk('public')->assertMissing($thumbPath);
     }
+
+    public function test_share_preview_uses_the_thumbnail(): void
+    {
+        Storage::fake('public');
+        $propiedad = $this->makePropiedad();
+        $imagen = Imagen::create(['propiedad_id' => $propiedad->id, 'path' => $this->storeUploadedImage()]);
+
+        $this->get('/propiedades/'.$propiedad->slug)
+            ->assertSee('<meta property="og:image" content="'.Storage::disk('public')->url($imagen->thumbPath()).'">', false);
+    }
 }
