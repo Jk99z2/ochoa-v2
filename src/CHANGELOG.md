@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-19
+
+### Agregado
+- Botones **Compartir por WhatsApp** y **Compartir en Facebook** en la ficha de cada propiedad, debajo del formulario de contacto. Si la página se abrió desde el enlace de referido de un agente (`?agente=`), el enlace compartido lo conserva, para que los contactos que lleguen por ahí sigan asignándose a ese agente.
+
 ## [0.14.1] - 2026-10-19
 
 ### Corregido
