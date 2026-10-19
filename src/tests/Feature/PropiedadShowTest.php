@@ -75,8 +75,8 @@ class PropiedadShowTest extends TestCase
         $propiedad = $this->makePropiedad(['precio' => 500, 'precio_por_m2' => true, 'm2_terreno' => 1000]);
 
         $this->get('/propiedades/'.$propiedad->slug)
-            ->assertSee('/ m²')
-            ->assertSee('Total: $500,000 MXN');
+            ->assertSee('$500 MXN por m²')
+            ->assertSee('Precio total: $500,000 MXN');
     }
 
     public function test_share_links_point_to_the_clean_property_url(): void
@@ -96,5 +96,25 @@ class PropiedadShowTest extends TestCase
 
         $this->get('/propiedades/'.$propiedad->slug.'?agente='.$otro->id)
             ->assertSee('sharer.php?u='.rawurlencode(url('/propiedades/'.$propiedad->slug).'?agente='.$otro->id), false);
+    }
+
+    public function test_square_metres_are_formatted_without_trailing_zeros(): void
+    {
+        $propiedad = $this->makePropiedad(['m2_terreno' => 17904, 'm2_construccion' => 120.5]);
+
+        $this->get('/propiedades/'.$propiedad->slug)
+            ->assertSee('17,904</span>', false)
+            ->assertSee('120.5</span>', false)
+            ->assertDontSee('17904.00');
+    }
+
+    public function test_zero_decimal_fields_are_hidden(): void
+    {
+        $propiedad = $this->makePropiedad(['m2_construccion' => 0, 'banios' => 0, 'precio_por_m2' => true, 'm2_terreno' => 0]);
+
+        $this->get('/propiedades/'.$propiedad->slug)
+            ->assertDontSee('m² construcción')
+            ->assertDontSee('Baños')
+            ->assertDontSee('Precio total');
     }
 }

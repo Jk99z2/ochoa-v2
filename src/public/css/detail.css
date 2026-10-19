@@ -31,11 +31,14 @@
 .detail-loc { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
 .detail-price { font-family: "Inter", sans-serif; font-size: 32px; font-weight: 600; color: var(--gold); }
 .detail-price-period { font-size: 15px; font-weight: 400; color: var(--muted); }
+.detail-price-total { font-size: 17px; font-weight: 600; color: var(--ink); margin-top: 6px; }
+.detail-price-total span { font-size: 13px; font-weight: 400; color: var(--muted); }
 
 .detail-stats { display: flex; flex-wrap: wrap; gap: 28px; padding: 24px 0; margin: 28px 0; border-top: 1px solid rgba(0,0,0,.08); border-bottom: 1px solid rgba(0,0,0,.08); }
 .stat { display: flex; flex-direction: column; }
 .stat-num { font-family: "Inter", sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); }
 .stat-label { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+.stat-label .unit { text-transform: none; } /* "M²" would be a different unit */
 
 .detail-section { margin-bottom: 32px; }
 .detail-subtitle { font-family: "Inter", sans-serif; font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }

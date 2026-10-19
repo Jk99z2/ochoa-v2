@@ -126,11 +126,11 @@ class Propiedad extends Model
             $about['numberOfBedrooms'] = $this->recamaras;
         }
 
-        if ($this->banios) {
+        if ($this->banios > 0) { // decimal casts are strings, and "0.0" is truthy
             $about['numberOfBathroomsTotal'] = (float) $this->banios;
         }
 
-        if ($this->m2_construccion) {
+        if ($this->m2_construccion > 0) {
             $about['floorSize'] = [
                 '@type' => 'QuantitativeValue',
                 'value' => (float) $this->m2_construccion,

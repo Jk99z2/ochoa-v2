@@ -58,7 +58,7 @@ class PropiedadesTable
                 TextColumn::make("precio")
                     ->label("Precio")
                     ->money("MXN")
-                    ->suffix(fn ($record) => $record->precio_por_m2 ? " / m²" : null)
+                    ->suffix(fn ($record) => $record->precio_por_m2 ? " por m²" : null)
                     ->sortable(),
 
                 TextColumn::make("estado")

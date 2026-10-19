@@ -87,20 +87,20 @@
         @endif
         <p class="detail-loc">{{ $propiedad->colonia }}@if($propiedad->colonia && $propiedad->municipio), @endif{{ $propiedad->municipio?->nombre }}, {{ $propiedad->estado_mx }}</p>
         <span class="detail-price">
-          ${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}
-          @if ($propiedad->precio_por_m2)<span class="detail-price-period">/ m²</span>@endif
+          {{-- "por m²" at full price size: a small, grey unit reads like the price of the whole terreno. --}}
+          ${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}@if ($propiedad->precio_por_m2) por m²@endif
           @if ($propiedad->operacion === "renta")<span class="detail-price-period">/mes</span>@endif
         </span>
-        @if ($propiedad->precio_por_m2 && $propiedad->m2_terreno)
-          <p class="detail-ref">Total: ${{ number_format($propiedad->precio * $propiedad->m2_terreno, 0) }} {{ $propiedad->moneda }} ({{ $propiedad->m2_terreno }} m²)</p>
+        @if ($propiedad->precio_por_m2 && $propiedad->m2_terreno > 0)
+          <p class="detail-price-total">Precio total: ${{ number_format($propiedad->precio * $propiedad->m2_terreno, 0) }} {{ $propiedad->moneda }} <span>({{ Number::format($propiedad->m2_terreno, maxPrecision: 2) }} m² × ${{ number_format($propiedad->precio, 0) }})</span></p>
         @endif
       </div>
 
       <div class="detail-stats">
-        @if ($propiedad->m2_terreno)<div class="stat"><span class="stat-num">{{ $propiedad->m2_terreno }}</span><span class="stat-label">m2 terreno</span></div>@endif
-        @if ($propiedad->m2_construccion)<div class="stat"><span class="stat-num">{{ $propiedad->m2_construccion }}</span><span class="stat-label">m2 construcción</span></div>@endif
+        @if ($propiedad->m2_terreno > 0)<div class="stat"><span class="stat-num">{{ Number::format($propiedad->m2_terreno, maxPrecision: 2) }}</span><span class="stat-label"><span class="unit">m²</span> terreno</span></div>@endif
+        @if ($propiedad->m2_construccion > 0)<div class="stat"><span class="stat-num">{{ Number::format($propiedad->m2_construccion, maxPrecision: 2) }}</span><span class="stat-label"><span class="unit">m²</span> construcción</span></div>@endif
         @if ($propiedad->recamaras)<div class="stat"><span class="stat-num">{{ $propiedad->recamaras }}</span><span class="stat-label">Recámaras</span></div>@endif
-        @if ($propiedad->banios)<div class="stat"><span class="stat-num">{{ $propiedad->banios }}</span><span class="stat-label">Baños</span></div>@endif
+        @if ($propiedad->banios > 0)<div class="stat"><span class="stat-num">{{ Number::format($propiedad->banios, maxPrecision: 1) }}</span><span class="stat-label">Baños</span></div>@endif
         @if ($propiedad->niveles)<div class="stat"><span class="stat-num">{{ $propiedad->niveles }}</span><span class="stat-label">Niveles</span></div>@endif
         @if ($propiedad->estacionamientos)<div class="stat"><span class="stat-num">{{ $propiedad->estacionamientos }}</span><span class="stat-label">Estacionamientos</span></div>@endif
       </div>

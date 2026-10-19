@@ -70,7 +70,10 @@ ul { list-style: none; }
 .nav-drop-panel a:hover { background: rgba(184,135,42,.12) !important; color: #fff !important; }
 .nav-burger { display: none; background: none; border: 1px solid rgba(255,255,255,.2); border-radius: 3px; padding: 6px 10px; cursor: pointer; color: #fff; font-size: 18px; line-height: 1; }
 @media (max-width: 900px) {
-  .nav-burger { display: block; }
+  .nav-burger { display: block; flex-shrink: 0; font-size: 15px; }
+  /* Let the site name give way on narrow phones instead of pushing the burger off-screen. */
+  .nav-brand { flex-shrink: 1; min-width: 0; margin-right: 12px; }
+  .nav-brand-text { font-size: 15px; }
   .nav-menu { display: none; flex-direction: column; align-items: flex-start; position: absolute; top: 64px; left: 0; right: 0; background: #141312; border-top: 1px solid var(--border); padding: 10px 16px 20px; gap: 0; max-height: calc(100svh - 100px); overflow-y: auto; }
   .nav-menu.open { display: flex; }
   .nav-menu li { width: 100%; }
