@@ -78,4 +78,23 @@ class PropiedadShowTest extends TestCase
             ->assertSee('/ m²')
             ->assertSee('Total: $500,000 MXN');
     }
+
+    public function test_share_links_point_to_the_clean_property_url(): void
+    {
+        $propiedad = $this->makePropiedad();
+        $url = rawurlencode(url('/propiedades/'.$propiedad->slug));
+
+        $this->get('/propiedades/'.$propiedad->slug.'?v=2')
+            ->assertSee('https://www.facebook.com/sharer/sharer.php?u='.$url, false)
+            ->assertSee('https://wa.me/?text=', false);
+    }
+
+    public function test_share_links_keep_the_referring_agent(): void
+    {
+        $propiedad = $this->makePropiedad();
+        $otro = Agente::create(['nombre' => 'Otro', 'email' => 'otro-'.uniqid().'@example.com']);
+
+        $this->get('/propiedades/'.$propiedad->slug.'?agente='.$otro->id)
+            ->assertSee('sharer.php?u='.rawurlencode(url('/propiedades/'.$propiedad->slug).'?agente='.$otro->id), false);
+    }
 }
