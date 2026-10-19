@@ -13,7 +13,7 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 - Botón **Ver tour en pantalla completa** debajo del tour virtual 360°: abre el tour en su propia página. En iPhone es la única forma de verlo a pantalla completa (Safari no permite pantalla completa dentro de una página, por eso el tour de 3DVista oculta su botón ahí).
 
 ### Cambiado
-- El recuadro del tour virtual es más alto (hasta 640 px, según la pantalla), para que la lista de escenas del tour (por ejemplo "360 AEREA", "INTERIOR 1A") se vea completa en vez de recortada.
+- El recuadro del tour virtual es más alto (hasta 640 px, según la pantalla). La lista de escenas del tour ("360 AEREA", "INTERIOR 1A"…) se sigue viendo recortada dentro de la ficha: el diseño de 3DVista la necesita a ~1280 px de ancho; se ve completa con "Ver tour en pantalla completa", o ajustándola en el proyecto de 3DVista.
 
 ### Corregido
 - Los cambios de estilos (CSS) tardaban hasta 4 horas en verse en el sitio, porque Cloudflare guardaba en caché la versión anterior de cada archivo. Ahora cada hoja de estilos se enlaza con su fecha de modificación (`site.css?v=…`), así que un archivo modificado se descarga de nuevo de inmediato. Detectado porque el arreglo del botón "Menu" en celulares (0.15.2) no se veía en producción.
