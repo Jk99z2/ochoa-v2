@@ -37,9 +37,9 @@ class PublicAssetsTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSee('<link rel="stylesheet" href="/css/flaticon.css">', false);
-        $response->assertSee('<link rel="stylesheet" href="/css/site.css">', false);
-        $response->assertSee('<link rel="stylesheet" href="/css/style.css">', false);
+        $response->assertSee('<link rel="stylesheet" href="/css/flaticon.css?v='.filemtime(public_path('css/flaticon.css')).'">', false);
+        $response->assertSee('<link rel="stylesheet" href="/css/site.css?v='.filemtime(public_path('css/site.css')).'">', false);
+        $response->assertSee('<link rel="stylesheet" href="/css/style.css?v='.filemtime(public_path('css/style.css')).'">', false);
     }
 
     public function test_facebook_icon_renders_as_inline_svg_not_an_icon_font_glyph(): void

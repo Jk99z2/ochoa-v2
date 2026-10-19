@@ -16,7 +16,7 @@
 @endsection
 
 @push("styles")
-  <link rel="stylesheet" href="/css/detail.css">
+  <link rel="stylesheet" href="/css/detail.css?v={{ filemtime(public_path("css/detail.css")) }}">
 @endpush
 
 @section("content")
@@ -128,14 +128,14 @@
           <h2 class="detail-subtitle">Tour virtual 360°</h2>
           <iframe
             title="Tour virtual 360°"
-            width="100%"
-            height="480"
-            style="border:0;border-radius:6px;"
+            class="tour-frame"
             loading="lazy"
             allow="fullscreen; gyroscope; accelerometer; xr-spatial-tracking"
             allowfullscreen
             src="{{ $propiedad->tour_url }}">
           </iframe>
+          {{-- iPhone Safari can't fullscreen an iframe, so the tour's own button is hidden there; a new tab is the only way to give it the whole screen. --}}
+          <a href="{{ $propiedad->tour_url }}" target="_blank" rel="noopener" class="agent-cta tour-open">Ver tour en pantalla completa</a>
         </div>
       @endif
 

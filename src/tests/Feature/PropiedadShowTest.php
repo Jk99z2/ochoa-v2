@@ -60,7 +60,8 @@ class PropiedadShowTest extends TestCase
         $propiedad = $this->makePropiedad(['tour_url' => 'https://example.com/tours/abc/index.htm']);
 
         $this->get('/propiedades/'.$propiedad->slug)
-            ->assertSee('src="https://example.com/tours/abc/index.htm"', false);
+            ->assertSee('src="https://example.com/tours/abc/index.htm"', false)
+            ->assertSee('<a href="https://example.com/tours/abc/index.htm" target="_blank" rel="noopener" class="agent-cta tour-open">Ver tour en pantalla completa</a>', false);
     }
 
     public function test_omits_virtual_tour_when_not_set(): void
