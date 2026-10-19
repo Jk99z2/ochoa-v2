@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-10-19
+
+### Corregido
+- Al compartir el enlace de una propiedad (WhatsApp, Facebook, etc.) se mostraba el logo en vez de la foto de la propiedad: la vista previa usaba la foto original (de varios MB), que WhatsApp descarta por pesar más de ~600 KB. Ahora usa la miniatura que ya se genera para cada foto.
+
 ## [0.14.0] - 2026-10-19
 
 ### Agregado
