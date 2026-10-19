@@ -62,6 +62,38 @@ class Propiedad extends Model
                 return $municipio->clave.'-'.str_pad((string) $next, 4, '0', STR_PAD_LEFT);
             });
         });
+
+        // Tours are 40-95 MB each: drop the old folder when it's replaced or the
+        // property is gone for good (a soft delete can still be restored).
+        static::updated(function (Propiedad $propiedad) {
+            if ($propiedad->wasChanged('tour_url')) {
+                static::borrarTour($propiedad->getOriginal('tour_url'));
+            }
+        });
+
+        static::forceDeleted(fn (Propiedad $propiedad) => static::borrarTour($propiedad->tour_url));
+    }
+
+    /**
+     * Deletes a tour folder created by instalarTour(), unless another property
+     * (deleted ones included) still points at it. Any other URL, like a tour
+     * hosted elsewhere, is left alone.
+     */
+    private static function borrarTour(?string $url): void
+    {
+        $public = Storage::disk('public');
+        $prefijo = preg_quote($public->url('tours/'), '#');
+
+        if (! $url || ! preg_match('#^'.$prefijo.'([0-9a-f-]{36})/#', $url, $m)) {
+            return;
+        }
+
+        $dir = 'tours/'.$m[1];
+        $enUso = static::withTrashed()->where('tour_url', 'like', $public->url($dir).'/%')->exists();
+
+        if (! $enUso) {
+            $public->deleteDirectory($dir);
+        }
     }
 
     public function agente(): BelongsTo
@@ -184,8 +216,6 @@ class Propiedad extends Model
      * its index page. bsdtar refuses absolute and "../" paths; on top of that
      * only regular files with static web extensions are copied (no symlinks),
      * since public/storage is served by nginx, which would execute a .php file.
-     *
-     * shortcut: the previous tour's folder is never deleted, clean storage/app/public/tours by hand if disk fills up.
      */
     public static function instalarTour(string $archivoPath): string
     {
