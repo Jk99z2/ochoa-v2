@@ -11,7 +11,7 @@
 @endsection
 
 @push("styles")
-  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/home.css?v={{ filemtime(public_path("css/home.css")) }}">
 @endpush
 
 @section("content")

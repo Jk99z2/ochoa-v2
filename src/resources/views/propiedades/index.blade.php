@@ -9,7 +9,7 @@
 @endsection
 
 @push("styles")
-  <link rel="stylesheet" href="/css/listing.css">
+  <link rel="stylesheet" href="/css/listing.css?v={{ filemtime(public_path("css/listing.css")) }}">
 @endpush
 
 @section("content")
