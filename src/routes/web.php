@@ -81,12 +81,15 @@ Route::get("/propiedades", function (Request $request) {
         $query->where("operacion", $request->operacion);
     }
 
+    // Per-m² terrenos are filtered by their total price, so they land in the same range as everything else.
+    $precioTotal = "CASE WHEN precio_por_m2 = 1 THEN precio * COALESCE(m2_terreno, 0) ELSE precio END";
+
     if ($request->filled("min_price")) {
-        $query->where("precio", ">=", $request->min_price);
+        $query->whereRaw("$precioTotal >= ?", [(int) $request->min_price]);
     }
 
     if ($request->filled("max_price")) {
-        $query->where("precio", "<=", $request->max_price);
+        $query->whereRaw("$precioTotal <= ?", [(int) $request->max_price]);
     }
 
     if ($request->filled("municipio")) {

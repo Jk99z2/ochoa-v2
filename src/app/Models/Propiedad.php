@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class Propiedad extends Model
 {
@@ -19,7 +22,7 @@ class Propiedad extends Model
 
     protected $fillable = [
         'agente_id', 'municipio_id', 'tipo_id', 'titulo', 'slug', 'descripcion', 'operacion',
-        'precio', 'moneda', 'mantenimiento', 'estado', 'publicada', 'destacada',
+        'precio', 'moneda', 'precio_por_m2', 'mantenimiento', 'estado', 'publicada', 'destacada',
         'm2_terreno', 'm2_construccion', 'recamaras', 'banios', 'niveles',
         'estacionamientos', 'antiguedad', 'calle', 'colonia',
         'estado_mx', 'cp', 'lat', 'lng', 'ocultar_direccion', 'video_url',
@@ -29,6 +32,7 @@ class Propiedad extends Model
     protected $casts = [
         'precio' => 'decimal:2',
         'mantenimiento' => 'decimal:2',
+        'precio_por_m2' => 'boolean',
         'publicada' => 'boolean',
         'destacada' => 'boolean',
         'ocultar_direccion' => 'boolean',
@@ -150,6 +154,12 @@ class Propiedad extends Model
                     'renta' => 'https://schema.org/LeaseOut',
                     default => null, // venta_renta: one price can't represent both unambiguously
                 },
+                'priceSpecification' => $this->precio_por_m2 ? [
+                    '@type' => 'UnitPriceSpecification',
+                    'price' => (float) $this->precio,
+                    'priceCurrency' => $this->moneda,
+                    'unitCode' => 'MTK',
+                ] : null,
             ]),
         ];
 
@@ -166,6 +176,68 @@ class Propiedad extends Model
         }
 
         return $schema;
+    }
+
+    /**
+     * Extracts a virtual tour export (3DVista, krpano, ...) uploaded to the
+     * local disk as .zip or .rar into public storage and returns the URL of
+     * its index page. bsdtar refuses absolute and "../" paths; on top of that
+     * only regular files with static web extensions are copied (no symlinks),
+     * since public/storage is served by nginx, which would execute a .php file.
+     *
+     * shortcut: the previous tour's folder is never deleted, clean storage/app/public/tours by hand if disk fills up.
+     */
+    public static function instalarTour(string $archivoPath): string
+    {
+        $permitidas = [
+            'htm', 'html', 'js', 'css', 'json', 'xml', 'txt',
+            'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico', 'cur',
+            'mp3', 'ogg', 'wav', 'm4a', 'mp4', 'webm', 'm3u8', 'ts',
+            'woff', 'woff2', 'ttf', 'otf',
+        ];
+        $local = Storage::disk('local');
+        $error = fn (string $msg) => ValidationException::withMessages(['data.tour_zip' => $msg]);
+
+        $tmp = 'tour-uploads/'.Str::uuid();
+        $local->makeDirectory($tmp);
+
+        try {
+            if (Process::run(['bsdtar', '-xf', $local->path($archivoPath), '-C', $local->path($tmp)])->failed()) {
+                throw $error('No se pudo abrir el archivo. Debe ser un .zip o .rar.');
+            }
+
+            $nombres = [];
+            $archivos = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($local->path($tmp), \FilesystemIterator::SKIP_DOTS));
+            foreach ($archivos as $archivo) {
+                $nombre = substr($archivo->getPathname(), strlen($local->path($tmp)) + 1);
+                if ($archivo->isLink() || ! $archivo->isFile() || str_starts_with($nombre, '__MACOSX/')
+                    || ! in_array(strtolower($archivo->getExtension()), $permitidas, true)) {
+                    continue;
+                }
+                $nombres[] = $nombre;
+            }
+
+            // The shallowest index page is the tour's root; exports are often archived inside a folder.
+            $indices = array_filter($nombres, fn ($n) => preg_match('#(^|/)index\.html?$#i', $n));
+            usort($indices, fn ($a, $b) => substr_count($a, '/') <=> substr_count($b, '/'));
+            if (! $indices) {
+                throw $error('El archivo no contiene un index.htm o index.html.');
+            }
+            $raiz = dirname($indices[0]) === '.' ? '' : dirname($indices[0]).'/';
+
+            $dir = 'tours/'.Str::uuid();
+            $public = Storage::disk('public');
+            foreach ($nombres as $nombre) {
+                if (str_starts_with($nombre, $raiz)) {
+                    $public->writeStream($dir.'/'.substr($nombre, strlen($raiz)), $local->readStream($tmp.'/'.$nombre));
+                }
+            }
+        } finally {
+            $local->deleteDirectory($tmp);
+        }
+        $local->delete($archivoPath);
+
+        return $public->url($dir.'/'.basename($indices[0]));
     }
 
     private function accommodationSchemaType(): string

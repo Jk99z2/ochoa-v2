@@ -54,4 +54,28 @@ class PropiedadShowTest extends TestCase
             false,
         );
     }
+
+    public function test_embeds_virtual_tour_when_set(): void
+    {
+        $propiedad = $this->makePropiedad(['tour_url' => 'https://example.com/tours/abc/index.htm']);
+
+        $this->get('/propiedades/'.$propiedad->slug)
+            ->assertSee('src="https://example.com/tours/abc/index.htm"', false);
+    }
+
+    public function test_omits_virtual_tour_when_not_set(): void
+    {
+        $propiedad = $this->makePropiedad();
+
+        $this->get('/propiedades/'.$propiedad->slug)->assertDontSee('Tour virtual 360°');
+    }
+
+    public function test_per_m2_price_shows_unit_and_total(): void
+    {
+        $propiedad = $this->makePropiedad(['precio' => 500, 'precio_por_m2' => true, 'm2_terreno' => 1000]);
+
+        $this->get('/propiedades/'.$propiedad->slug)
+            ->assertSee('/ m²')
+            ->assertSee('Total: $500,000 MXN');
+    }
 }

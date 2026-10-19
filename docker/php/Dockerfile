@@ -1,7 +1,7 @@
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache git zip unzip icu-dev libzip-dev oniguruma-dev \
-    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev mysql-client \
+    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev mysql-client libarchive-tools \
  && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
  && docker-php-ext-install -j$(nproc) pdo_mysql gd zip intl bcmath exif opcache
 
@@ -25,3 +25,9 @@ RUN { \
       echo 'opcache.validate_timestamps=1'; \
       echo 'opcache.revalidate_freq=0'; \
     } > /usr/local/etc/php/conf.d/opcache.ini
+
+# Virtual tour zips are ~80 MB (see config/livewire.php).
+RUN { \
+      echo 'upload_max_filesize=100M'; \
+      echo 'post_max_size=100M'; \
+    } > /usr/local/etc/php/conf.d/uploads.ini

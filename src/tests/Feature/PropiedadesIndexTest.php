@@ -181,4 +181,18 @@ class PropiedadesIndexTest extends TestCase
         $this->assertStringContainsString('"url":"'.route('propiedades.show', $shown->slug).'"', $html);
         $this->assertStringNotContainsString($notShown->slug, $html);
     }
+
+    public function test_price_filter_uses_the_total_for_per_m2_terrenos(): void
+    {
+        // $500/m² × 1,000 m² = $500,000 total: outside the range even though 500 is below it.
+        $porM2 = $this->makePropiedad(['precio' => 500, 'precio_por_m2' => true, 'm2_terreno' => 1000]);
+        $enRango = $this->makePropiedad(['precio' => 500, 'precio_por_m2' => true, 'm2_terreno' => 300]);
+
+        $response = $this->get('/propiedades?min_price=100000&max_price=200000');
+
+        $response->assertViewHas('propiedades', function ($propiedades) use ($porM2, $enRango) {
+            return $propiedades->contains('id', $enRango->id)
+                && ! $propiedades->contains('id', $porM2->id);
+        });
+    }
 }
