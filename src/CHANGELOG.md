@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-19
+
+### Cambiado
+- Al reemplazar el tour virtual de una propiedad, o al eliminarla de forma permanente, ahora se borra la carpeta del tour anterior (40-95 MB cada una), para que no se llene el disco del servidor. Si la propiedad solo se elimina (se puede restaurar), el tour se conserva. Nunca se borra un tour que otra propiedad siga usando ni un tour alojado en otro sitio.
+
 ## [0.15.3] - 2026-10-19
 
 ### Agregado
