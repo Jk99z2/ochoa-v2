@@ -12,3 +12,4 @@
 .env.prod
 docker/nginx/default.conf
 /graphify-out/
+/.claude/
