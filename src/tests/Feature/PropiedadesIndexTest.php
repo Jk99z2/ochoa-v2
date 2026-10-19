@@ -195,4 +195,11 @@ class PropiedadesIndexTest extends TestCase
                 && ! $propiedades->contains('id', $porM2->id);
         });
     }
+
+    public function test_cards_show_square_metres_of_land(): void
+    {
+        $this->makePropiedad(['m2_terreno' => 17904]);
+
+        $this->get('/propiedades')->assertSee('17,904 m² terreno');
+    }
 }

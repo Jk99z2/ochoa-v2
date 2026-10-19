@@ -158,4 +158,12 @@ class RealEstateListingSchemaTest extends TestCase
     {
         $this->assertArrayNotHasKey('priceSpecification', $this->makePropiedad()->realEstateListingSchema()['offers']);
     }
+
+    public function test_zero_baths_and_floor_size_are_omitted(): void
+    {
+        $about = $this->makePropiedad(['banios' => 0, 'm2_construccion' => 0])->realEstateListingSchema()['about'];
+
+        $this->assertArrayNotHasKey('numberOfBathroomsTotal', $about);
+        $this->assertArrayNotHasKey('floorSize', $about);
+    }
 }

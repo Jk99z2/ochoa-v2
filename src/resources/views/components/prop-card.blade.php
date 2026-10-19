@@ -20,10 +20,11 @@
   <div class="prop-body">
     <h3><a href="{{ route("propiedades.show", $propiedad->slug) }}">{{ $propiedad->titulo }}</a></h3>
     <p class="prop-cat">{{ $propiedad->tipo?->nombre }}</p>
-    <span class="prop-price">${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}@if ($propiedad->precio_por_m2) / m²@endif</span>
+    <span class="prop-price">${{ number_format($propiedad->precio, 0) }} {{ $propiedad->moneda }}@if ($propiedad->precio_por_m2) por m²@endif</span>
     <div class="prop-meta">
-      @if ($propiedad->m2_construccion)<span>{{ $propiedad->m2_construccion }} m2</span>@endif
-      @if ($propiedad->banios)<span>{{ $propiedad->banios }} baños</span>@endif
+      @if ($propiedad->m2_terreno > 0)<span>{{ Number::format($propiedad->m2_terreno, maxPrecision: 2) }} m² terreno</span>@endif
+      @if ($propiedad->m2_construccion > 0)<span>{{ Number::format($propiedad->m2_construccion, maxPrecision: 2) }} m² const.</span>@endif
+      @if ($propiedad->banios > 0)<span>{{ Number::format($propiedad->banios, maxPrecision: 1) }} baños</span>@endif
       @if ($propiedad->recamaras)<span>{{ $propiedad->recamaras }} rec</span>@endif
     </div>
   </div>

@@ -91,7 +91,7 @@ class PropiedadForm
 
                         Toggle::make("precio_por_m2")
                             ->label("Precio por m²")
-                            ->helperText("Para terrenos que se venden por metro cuadrado: el precio se muestra como \"/ m²\" y el total se calcula con los m² de terreno.")
+                            ->helperText("Para terrenos que se venden por metro cuadrado: el precio se muestra como \"por m²\" y el total se calcula con los m² de terreno.")
                             ->default(false),
 
                         TextInput::make("mantenimiento")

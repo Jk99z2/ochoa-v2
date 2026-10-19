@@ -7,6 +7,15 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.15.2] - 2026-10-19
+
+### Corregido
+- Los metros cuadrados se mostraban como "17904.00": ahora se muestran como "17,904" (con separador de miles y sin ".00"), y la unidad dice "m²" en vez de "m2".
+- El precio por m² podía confundirse con el precio del terreno completo: "$500 MXN" se veía grande y "/ m²" pequeño y en gris. Ahora dice "$500 MXN por m²" todo del mismo tamaño, en la ficha, las tarjetas, el carrusel de inicio y el panel, y la ficha muestra debajo el **Precio total** destacado con su cálculo (m² × precio).
+- Los campos en cero (por ejemplo "0 m²" o "0.0 baños") ya no se muestran en las tarjetas, la ficha ni los datos estructurados, igual que los campos vacíos. Los baños se muestran sin ".0" ("2 baños").
+- Las tarjetas de propiedades ahora muestran los m² de terreno (antes solo los de construcción), para que en un terreno por m² se pueda estimar el total desde el listado.
+- En celulares angostos, el botón "Menu" se salía por la derecha de la pantalla porque el nombre del sitio no podía encogerse.
+
 ## [0.15.1] - 2026-10-19
 
 ### Cambiado
