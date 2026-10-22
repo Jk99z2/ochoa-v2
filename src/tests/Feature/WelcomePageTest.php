@@ -116,4 +116,14 @@ class WelcomePageTest extends TestCase
         $response->assertSee('<link rel="canonical" href="'.url('/').'">', false);
         $this->assertSame(1, preg_match_all('/<h1[ >]/', $response->getContent()));
     }
+
+    public function test_home_page_has_a_share_preview_image_small_enough_for_whatsapp(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('<meta property="og:image" content="'.asset('images/og-home.jpg').'">', false)
+            ->assertSee('<meta property="og:url" content="'.url('/').'">', false);
+
+        $this->assertLessThan(600 * 1024, filesize(public_path('images/og-home.jpg')));
+    }
 }

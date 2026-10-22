@@ -6,8 +6,13 @@
   <link rel="canonical" href="{{ url('/') }}">
   <meta name="description" content="Encuentra casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Ochoa Real Estate Services, tu inmobiliaria de confianza.">
   <meta property="og:title" content="Ochoa Real Estate Services - Manzanillo, Colima">
-  <meta property="og:description" content="Encuentra tu proxima propiedad en Manzanillo, Colima.">
+  <meta property="og:description" content="Casas, terrenos y departamentos en venta y renta en Manzanillo, Colima.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ url('/') }}">
+  {{-- 1200x630 and under 600 KB, or WhatsApp shows no preview image. --}}
+  <meta property="og:image" content="{{ asset('images/og-home.jpg') }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 @endsection
 
 @push("styles")

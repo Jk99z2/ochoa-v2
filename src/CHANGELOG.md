@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-10-22
+
+### Corregido
+- Al compartir la página principal (ochoarealestateservices.com) por WhatsApp o Facebook ahora aparece una vista previa con imagen, título y descripción. Antes no tenía imagen para mostrar.
+
 ## [0.16.0] - 2026-10-19
 
 ### Cambiado
