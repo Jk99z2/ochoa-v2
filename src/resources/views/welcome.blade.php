@@ -9,8 +9,8 @@
   <meta property="og:description" content="Casas, terrenos y departamentos en venta y renta en Manzanillo, Colima.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ url('/') }}">
-  {{-- 1200x630 and under 600 KB, or WhatsApp shows no preview image. --}}
-  <meta property="og:image" content="{{ asset('images/og-home.jpg') }}">
+  {{-- 1200x630 and under 600 KB, or WhatsApp shows no preview image. Versioned so a new photo replaces the cached one. --}}
+  <meta property="og:image" content="{{ asset('images/og-home.jpg') }}?v={{ filemtime(public_path('images/og-home.jpg')) }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 @endsection
