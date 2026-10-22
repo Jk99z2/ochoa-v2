@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.16.3] - 2026-10-22
+
+### Corregido
+- Al compartir la página de propiedades (/propiedades) por WhatsApp o Facebook ahora aparece una vista previa con la misma imagen de la página principal, título y descripción.
+
 ## [0.16.2] - 2026-10-22
 
 ### Cambiado
