@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.16.2] - 2026-10-22
+
+### Cambiado
+- La imagen de vista previa de la página principal ahora es una casa moderna de nuestro catálogo, en lugar de la foto genérica de una mansión.
+
 ## [0.16.1] - 2026-10-22
 
 ### Corregido

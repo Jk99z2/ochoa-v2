@@ -121,7 +121,7 @@ class WelcomePageTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('<meta property="og:image" content="'.asset('images/og-home.jpg').'">', false)
+            ->assertSee('<meta property="og:image" content="'.asset('images/og-home.jpg').'?v='.filemtime(public_path('images/og-home.jpg')).'">', false)
             ->assertSee('<meta property="og:url" content="'.url('/').'">', false);
 
         $this->assertLessThan(600 * 1024, filesize(public_path('images/og-home.jpg')));
