@@ -202,4 +202,12 @@ class PropiedadesIndexTest extends TestCase
 
         $this->get('/propiedades')->assertSee('17,904 m² terreno');
     }
+
+    public function test_index_has_a_share_preview(): void
+    {
+        $this->get('/propiedades')
+            ->assertOk()
+            ->assertSee('<meta property="og:image" content="'.asset('images/og-home.jpg').'?v='.filemtime(public_path('images/og-home.jpg')).'">', false)
+            ->assertSee('<meta property="og:title" content="Propiedades en Manzanillo, Colima', false);
+    }
 }

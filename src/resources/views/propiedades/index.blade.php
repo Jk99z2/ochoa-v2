@@ -5,6 +5,14 @@
 @section("meta")
   <link rel="canonical" href="{{ $canonical }}">
   <meta name="description" content="Explora casas, terrenos y departamentos en venta y renta en Manzanillo, Colima. Encuentra tu proxima propiedad con {{ $siteConfig->nombre_sitio }}.">
+  <meta property="og:title" content="Propiedades en Manzanillo, Colima - {{ $siteConfig->nombre_sitio }}">
+  <meta property="og:description" content="Casas, terrenos y departamentos en venta y renta en Manzanillo, Colima.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ $canonical }}">
+  {{-- Same image as the home page (see welcome.blade.php). --}}
+  <meta property="og:image" content="{{ asset('images/og-home.jpg') }}?v={{ filemtime(public_path('images/og-home.jpg')) }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <script type="application/ld+json">{!! json_encode($itemListSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endsection
 
