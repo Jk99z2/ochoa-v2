@@ -22,7 +22,9 @@ class LeadController extends Controller
         }
 
         $spamText = strtolower($request->input('mensaje', '').' '.$request->input('nombre', ''));
-        if (preg_match('#https?://|www\.|unsubscribe|seo\s|marketing\s+service|\bsms\b|lead\s+generation#i', $spamText)) {
+        // Real names have no digits; bots send junk like "NAERTREGE1963224NEYRTHYT".
+        if (preg_match('#https?://|www\.|unsubscribe|seo\s|marketing\s+service|\bsms\b|lead\s+generation#i', $spamText)
+            || preg_match('/\d/', $request->input('nombre', ''))) {
             return $this->genericSuccess();
         }
 

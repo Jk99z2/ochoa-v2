@@ -7,6 +7,11 @@ Las versiones anteriores a la 0.8.0 se reconstruyeron a partir del historial de 
 
 ## [Unreleased]
 
+## [0.16.4] - 2026-11-18
+
+### Corregido
+- El formulario de contacto ahora descarta en silencio los mensajes cuyo nombre contiene números (por ejemplo "NAERTREGE1963224NEYRTHYT"), un patrón típico de bots de spam. Ya no llegan como leads ni envían correo.
+
 ## [0.16.3] - 2026-10-22
 
 ### Corregido
