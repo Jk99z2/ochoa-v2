@@ -72,6 +72,20 @@ class LeadControllerTest extends TestCase
         $this->assertDatabaseCount('leads', 0);
     }
 
+    public function test_name_with_digits_silently_rejects_without_creating_lead(): void
+    {
+        $response = $this->post(route('leads.store'), [
+            'nombre' => 'NAERTREGE1963224NEYRTHYT',
+            'email' => 'harley73100@notboxletters.com',
+            'telefono' => '83267495369',
+            'mensaje' => 'METRYTRH1963224MAYTRYR',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+        $this->assertDatabaseCount('leads', 0);
+    }
+
     public function test_missing_nombre_fails_validation(): void
     {
         $response = $this->post(route('leads.store'), [
